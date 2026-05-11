@@ -214,7 +214,7 @@ li + li {
   padding: clamp(4rem, 7vw, 7rem) 1.25rem;
   display: flex;
   align-items: center;
-  background-image: url("assets/clariobase-hero-visual.png");
+  background-image: url("assets/clariobase-hero-desktop.webp");
   background-size: cover;
   background-position: center right;
   background-repeat: no-repeat;
@@ -223,7 +223,7 @@ li + li {
 
 .hero--background {
   background:
-    url("assets/clariobase-hero-visual.png") center right / cover no-repeat,
+    url("assets/clariobase-hero-desktop.webp") center right / cover no-repeat,
     #3a2923;
 }
 
@@ -259,6 +259,18 @@ li + li {
   height: 170px;
   pointer-events: none;
   background: linear-gradient(to bottom, rgba(251, 247, 240, 0), var(--paper));
+}
+
+@media (max-width: 768px) {
+  .hero {
+    background-image: url("assets/clariobase-hero-mobile.webp");
+  }
+
+  .hero--background {
+    background:
+      url("assets/clariobase-hero-mobile.webp") center right / cover no-repeat,
+      #3a2923;
+  }
 }
 
 .hero-inner {
