@@ -853,8 +853,8 @@ li + li {
   }
 
   .hero h1 {
-    font-size: clamp(1.18rem, 4.7vw, 1.56rem);
-    line-height: 1.06;
+    font-size: clamp(1.85rem, 8vw, 2.55rem);
+    line-height: 1.08;
   }
 
   h2 {
@@ -874,8 +874,8 @@ li + li {
     margin: 0 auto;
     padding: 1.5rem;
     border-radius: 24px;
-    border-color: rgba(255, 255, 255, .14);
-    background: rgba(38, 25, 18, .72);
+    border-color: rgba(255, 250, 243, .18);
+    background: rgba(48, 33, 25, .66);
     box-shadow: 0 18px 58px rgba(0, 0, 0, .2);
     backdrop-filter: blur(10px);
     overflow: hidden;
@@ -894,7 +894,7 @@ li + li {
   }
 
   .hero-actions,
-  .button {
+  .hero .button {
     width: 100%;
   }
 
@@ -1004,7 +1004,7 @@ li + li {
   }
 
   .hero h1 {
-    font-size: clamp(1.12rem, 4.45vw, 1.48rem);
+    font-size: clamp(1.72rem, 7.6vw, 2.25rem);
   }
 }
 
