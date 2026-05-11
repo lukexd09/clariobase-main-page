@@ -92,7 +92,7 @@ const sendEmail = async ({ name, email, url, city, serviceType, message, privacy
     [
       "Polityka prywatności",
       privacyAccepted
-        ? "Użytkownik potwierdził zapoznanie się z Polityką prywatności."
+        ? "Użytkownik potwierdził zapoznanie się z Polityką prywatności: tak"
         : "Brak potwierdzenia."
     ],
     ["Data wysłania", sentAt],
