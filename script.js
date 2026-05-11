@@ -4,7 +4,7 @@ const year = document.querySelector("[data-year]");
 const contactForm = document.querySelector("#contact-form");
 const formStatus = document.querySelector("#form-status");
 
-let turnstileReady = false;
+let turnstileToken = "";
 
 if (year) {
   year.textContent = new Date().getFullYear();
@@ -39,22 +39,24 @@ const resetTurnstile = () => {
   if (window.turnstile?.reset) {
     window.turnstile.reset();
   }
-  turnstileReady = false;
+  turnstileToken = "";
 };
 
-window.onTurnstileSuccess = () => {
-  turnstileReady = true;
+window.onTurnstileSuccess = function (token) {
+  turnstileToken = token || "";
+  console.log("Turnstile token received:", Boolean(turnstileToken));
+
   if (formStatus?.classList.contains("is-error")) {
     setFormStatus("", "");
   }
 };
 
-window.onTurnstileExpired = () => {
-  turnstileReady = false;
+window.onTurnstileExpired = function () {
+  turnstileToken = "";
 };
 
-window.onTurnstileError = () => {
-  turnstileReady = false;
+window.onTurnstileError = function () {
+  turnstileToken = "";
   setFormStatus("Potwierdź zabezpieczenie antyspamowe i spróbuj ponownie.", "error");
 };
 
@@ -77,9 +79,7 @@ if (contactForm instanceof HTMLFormElement) {
       return;
     }
 
-    const turnstileToken = window.turnstile?.getResponse ? window.turnstile.getResponse() : "";
-
-    if (!turnstileToken || !turnstileReady) {
+    if (!turnstileToken) {
       setFormStatus("Potwierdź zabezpieczenie antyspamowe i spróbuj ponownie.", "error");
       return;
     }
