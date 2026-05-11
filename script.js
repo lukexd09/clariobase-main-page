@@ -35,6 +35,14 @@ const setFormStatus = (message, type) => {
   }
 };
 
+function clearFormStatus() {
+  const status = document.getElementById("form-status");
+  if (!status) return;
+
+  status.textContent = "";
+  status.className = "form-status";
+}
+
 const resetTurnstile = () => {
   if (window.turnstile?.reset) {
     window.turnstile.reset();
@@ -45,10 +53,7 @@ const resetTurnstile = () => {
 window.onTurnstileSuccess = function (token) {
   turnstileToken = token || "";
   console.log("Turnstile token received:", Boolean(turnstileToken));
-
-  if (formStatus?.classList.contains("is-error")) {
-    setFormStatus("", "");
-  }
+  clearFormStatus();
 };
 
 window.onTurnstileExpired = function () {
@@ -57,7 +62,7 @@ window.onTurnstileExpired = function () {
 
 window.onTurnstileError = function () {
   turnstileToken = "";
-  setFormStatus("Potwierdź zabezpieczenie antyspamowe i spróbuj ponownie.", "error");
+  setFormStatus("Nie udało się potwierdzić zabezpieczenia antyspamowego. Odśwież stronę lub spróbuj ponownie za chwilę.", "error");
 };
 
 if (contactForm instanceof HTMLFormElement) {
