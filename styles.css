@@ -481,6 +481,16 @@ li + li {
   grid-column: 1 / -1;
 }
 
+.problem-copy h2 {
+  margin-bottom: 1.2rem;
+  line-height: 1.08;
+}
+
+.problem-copy p {
+  margin-top: 0;
+  line-height: 1.7;
+}
+
 .problem-list {
   padding: 1.2rem;
   border-radius: 22px;
@@ -1207,19 +1217,27 @@ li + li {
   }
 
   .problem {
-    padding-top: 2.4rem;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .problem-card {
+    padding: 2rem 1.25rem;
   }
 
   .problem-copy h2 {
-    font-size: clamp(2rem, 8.5vw, 2.85rem);
+    margin-bottom: 1.35rem;
+    font-size: clamp(2.45rem, 11vw, 4rem);
     line-height: 1.08;
+    letter-spacing: 0;
   }
 
   .problem-copy p {
     max-width: 100%;
-    margin-top: 1rem;
-    font-size: .98rem;
-    line-height: 1.65;
+    margin-top: 0;
+    font-size: 1rem;
+    line-height: 1.75;
+    transform: none;
   }
 
   .problem-list {
@@ -1304,6 +1322,12 @@ li + li {
 
   .hero h1 {
     font-size: clamp(1.72rem, 7.6vw, 2.25rem);
+  }
+
+  .problem-copy h2 {
+    margin-bottom: 1.25rem;
+    font-size: clamp(2.25rem, 12vw, 3.4rem);
+    line-height: 1.1;
   }
 
   .cf-turnstile {
