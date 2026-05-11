@@ -71,7 +71,7 @@ const resetTurnstile = () => {
 
 window.onTurnstileSuccess = function (token) {
   turnstileToken = token || "";
-  console.log("Turnstile token received:", Boolean(turnstileToken));
+  console.debug("Turnstile success:", Boolean(turnstileToken));
   clearFormStatus();
 };
 
@@ -81,7 +81,6 @@ window.onTurnstileExpired = function () {
 
 window.onTurnstileError = function () {
   turnstileToken = "";
-  setFormStatus("Nie udało się potwierdzić zabezpieczenia antyspamowego. Odśwież stronę lub spróbuj ponownie za chwilę.", "error");
 };
 
 if (contactForm instanceof HTMLFormElement) {
@@ -126,6 +125,8 @@ if (contactForm instanceof HTMLFormElement) {
       resetTurnstile();
       return;
     }
+
+    console.debug("Submit token available:", Boolean(turnstileToken));
 
     if (!turnstileToken) {
       setFormStatus("Potwierdź zabezpieczenie antyspamowe i spróbuj ponownie.", "error");

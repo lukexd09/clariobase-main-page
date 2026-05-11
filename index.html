@@ -509,13 +509,13 @@
           <p class="form-security-note">Formularz jest zabezpieczony przed spamem.</p>
           <div class="turnstile-wrap">
             <div
-              class="cf-turnstile"
+              class="cf-turnstile turnstile-widget"
               data-sitekey="0x4AAAAAADNXfgJDrbxx5Eie"
+              data-theme="light"
+              data-size="normal"
               data-callback="onTurnstileSuccess"
               data-expired-callback="onTurnstileExpired"
               data-error-callback="onTurnstileError"
-              data-theme="light"
-              data-size="normal"
             ></div>
           </div>
           <button class="button primary" type="submit">Wyślij prośbę o mini-audyt</button>
@@ -538,7 +538,7 @@
       <p>© 2026 ClarioBase. Wszelkie prawa zastrzeżone.</p>
     </footer>
 
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <script src="script.js" defer></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
   </body>
 </html>
