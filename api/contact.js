@@ -104,7 +104,7 @@ const sendEmail = async ({ name, email, url, city, serviceType, message }) => {
     )
     .join("");
 
-  const response = await fetch("https://api.resend.com/emails", {
+  const resendResponse = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
@@ -126,8 +126,17 @@ const sendEmail = async ({ name, email, url, city, serviceType, message }) => {
     })
   });
 
-  if (!response.ok) {
-    throw new Error("Resend request failed");
+  if (!resendResponse.ok) {
+    const resendErrorBody = await resendResponse.text();
+
+    console.error("Resend send failed", {
+      status: resendResponse.status,
+      body: resendErrorBody
+    });
+
+    const error = new Error("Email delivery failed");
+    error.code = "EMAIL_DELIVERY_FAILED";
+    throw error;
   }
 };
 
@@ -186,6 +195,10 @@ module.exports = async function handler(req, res) {
     await sendEmail(data);
     return json(res, 200, { ok: true });
   } catch (error) {
+    if (error.code === "EMAIL_DELIVERY_FAILED") {
+      return json(res, 500, { ok: false, message: "Email delivery failed" });
+    }
+
     return json(res, 500, { ok: false });
   }
 };
