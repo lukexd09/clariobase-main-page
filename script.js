@@ -3,6 +3,7 @@ const navLinks = document.querySelector("[data-nav-links]");
 const year = document.querySelector("[data-year]");
 const contactForm = document.querySelector("#contact-form");
 const formStatus = document.querySelector("#form-status");
+const privacyError = document.querySelector("#privacy-error");
 
 let turnstileToken = "";
 
@@ -28,10 +29,11 @@ const setFormStatus = (message, type) => {
   if (!formStatus) return;
 
   formStatus.textContent = message;
-  formStatus.classList.remove("is-success", "is-error");
+  formStatus.classList.remove("is-success", "is-error", "form-status--success", "form-status--error");
 
   if (type) {
     formStatus.classList.add(`is-${type}`);
+    formStatus.classList.add(`form-status--${type}`);
   }
 };
 
@@ -42,6 +44,23 @@ function clearFormStatus() {
   status.textContent = "";
   status.className = "form-status";
 }
+
+const setPrivacyError = (checkbox, message) => {
+  if (!privacyError) return;
+
+  const consent = checkbox?.closest?.(".form-consent");
+  privacyError.textContent = message;
+
+  if (message) {
+    checkbox?.setAttribute("aria-invalid", "true");
+    checkbox?.setAttribute("aria-describedby", "privacy-error");
+    consent?.classList.add("has-error");
+  } else {
+    checkbox?.setAttribute("aria-invalid", "false");
+    checkbox?.removeAttribute("aria-describedby");
+    consent?.classList.remove("has-error");
+  }
+};
 
 const resetTurnstile = () => {
   if (window.turnstile?.reset) {
@@ -66,6 +85,16 @@ window.onTurnstileError = function () {
 };
 
 if (contactForm instanceof HTMLFormElement) {
+  const privacyAcceptedInput = contactForm.elements.privacyAccepted;
+
+  if (privacyAcceptedInput instanceof HTMLInputElement) {
+    privacyAcceptedInput.addEventListener("change", () => {
+      if (privacyAcceptedInput.checked) {
+        setPrivacyError(privacyAcceptedInput, "");
+      }
+    });
+  }
+
   contactForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     setFormStatus("", "");
@@ -73,12 +102,16 @@ if (contactForm instanceof HTMLFormElement) {
     const privacyAccepted = contactForm.elements.privacyAccepted;
 
     if (privacyAccepted instanceof HTMLInputElement && !privacyAccepted.checked) {
-      setFormStatus("Potwierdź zapoznanie się z Polityką prywatności.", "error");
+      setPrivacyError(privacyAccepted, "Zaznacz zgodę, aby wysłać formularz.");
+      privacyAccepted.focus();
       return;
     }
 
+    if (privacyAccepted instanceof HTMLInputElement) {
+      setPrivacyError(privacyAccepted, "");
+    }
+
     if (!contactForm.reportValidity()) {
-      setFormStatus("Uzupełnij wymagane pola i sprawdź poprawność adresu email oraz linku.", "error");
       return;
     }
 
@@ -87,6 +120,9 @@ if (contactForm instanceof HTMLFormElement) {
     if (String(formData.get("companyWebsite") || "").trim()) {
       setFormStatus("Dziękuję — formularz został wysłany. Odpowiem mailowo tak szybko, jak to możliwe.", "success");
       contactForm.reset();
+      if (privacyAccepted instanceof HTMLInputElement) {
+        setPrivacyError(privacyAccepted, "");
+      }
       resetTurnstile();
       return;
     }
@@ -129,6 +165,9 @@ if (contactForm instanceof HTMLFormElement) {
       }
 
       contactForm.reset();
+      if (privacyAccepted instanceof HTMLInputElement) {
+        setPrivacyError(privacyAccepted, "");
+      }
       resetTurnstile();
       setFormStatus("Dziękuję — formularz został wysłany. Odpowiem mailowo tak szybko, jak to możliwe.", "success");
     } catch (error) {
