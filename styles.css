@@ -753,6 +753,107 @@ li + li {
   line-height: 1.45;
 }
 
+.process-section,
+.proof-section,
+.faq-section {
+  max-width: none;
+  padding-left: max(1.25rem, calc((100vw - 1180px) / 2 + 1.25rem));
+  padding-right: max(1.25rem, calc((100vw - 1180px) / 2 + 1.25rem));
+}
+
+.process-steps,
+.proof-grid,
+.faq-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.process-steps {
+  max-width: 1180px;
+  margin: 0 auto;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+}
+
+.process-step,
+.proof-item,
+.faq-item {
+  border: 1px solid rgba(85, 62, 49, .10);
+  border-radius: 22px;
+  background: rgba(255, 250, 243, .64);
+}
+
+.process-step {
+  padding: 1.25rem;
+}
+
+.process-number {
+  min-width: 2.45rem;
+  height: 2.45rem;
+  margin-bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: var(--ink);
+  background: rgba(238, 220, 195, .72);
+  font-size: .82rem;
+  font-weight: 900;
+  letter-spacing: .04em;
+}
+
+.process-step h3,
+.proof-item h3,
+.faq-item h3 {
+  color: var(--ink);
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+
+.process-step p,
+.proof-item p,
+.faq-item p {
+  margin-top: .65rem;
+  color: rgba(76, 55, 44, .72);
+  font-size: .95rem;
+  line-height: 1.65;
+}
+
+.proof-card {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(1.6rem, 4vw, 3rem);
+  border: 1px solid rgba(85, 62, 49, .10);
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at top right, rgba(220, 188, 148, .22), transparent 34%),
+    rgba(255, 250, 243, .72);
+}
+
+.proof-card .section-heading {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.proof-card .section-heading p + p {
+  margin-top: .75rem;
+}
+
+.proof-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.proof-item,
+.faq-item {
+  padding: 1.15rem;
+}
+
+.faq-grid {
+  max-width: 1180px;
+  margin: 0 auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .contact {
   margin-bottom: 4rem;
   padding: clamp(1.4rem, 4vw, 3rem);
@@ -1339,6 +1440,31 @@ li + li {
     grid-template-columns: 1fr;
   }
 
+  .process-section,
+  .proof-section,
+  .faq-section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .process-steps,
+  .proof-grid,
+  .faq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .process-step,
+  .proof-item,
+  .faq-item {
+    padding: 1rem;
+    border-radius: 20px;
+  }
+
+  .proof-card {
+    padding: 2rem 1.25rem;
+    border-radius: 26px;
+  }
+
   .form-grid {
     grid-template-columns: 1fr;
   }
@@ -1361,7 +1487,10 @@ li + li {
   .care-grid,
   .why-grid,
   .scope-grid,
-  .about {
+  .about,
+  .process-steps,
+  .proof-grid,
+  .faq-grid {
     grid-template-columns: 1fr;
   }
 
