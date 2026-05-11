@@ -42,7 +42,6 @@
             "@id": "https://clariobase.pl/#organization",
             "name": "ClarioBase",
             "url": "https://clariobase.pl/",
-            "email": "kontakt@clariobase.pl",
             "logo": "https://clariobase.pl/favicon.svg",
             "areaServed": [
               "Katowice",
@@ -141,22 +140,16 @@
         <div class="hero-inner">
           <div class="hero-content">
             <p class="eyebrow">Strony internetowe dla branży beauty</p>
-            <h1 aria-label="Strona dla salonu beauty, która wyjaśnia ofertę, buduje zaufanie i prowadzi klientkę do kontaktu.">
-              <span class="desktop-copy" aria-hidden="true">
-                Strona dla salonu beauty, która wyjaśnia ofertę, buduje zaufanie i prowadzi klientkę do kontaktu.
-              </span>
-              <span class="mobile-copy" aria-hidden="true">Strona beauty, która prowadzi klientkę do kontaktu.</span>
+            <h1>
+              Strona dla salonu beauty, która wyjaśnia ofertę, buduje zaufanie i prowadzi klientkę do kontaktu.
             </h1>
             <p class="hero-lead">
               Pomagam salonom, kosmetologom i specjalistkom beauty uporządkować ofertę online — tak, żeby klientka
               szybko zobaczyła usługi, efekty, opinie, lokalizację i wiedziała, jak umówić wizytę.
             </p>
-            <p class="location-badge" aria-label="Dla salonów i specjalistek beauty z Katowic, Chorzowa, Gliwic, Zabrza, Bytomia, Tychów, Rudy Śląskiej, Sosnowca i okolic.">
-              <span class="desktop-copy" aria-hidden="true">
-                Dla salonów i specjalistek beauty z Katowic, Chorzowa, Gliwic, Zabrza, Bytomia, Tychów, Rudy Śląskiej,
-                Sosnowca i okolic.
-              </span>
-              <span class="mobile-copy" aria-hidden="true">Dla salonów beauty ze Śląska i okolic.</span>
+            <p class="location-badge">
+              Dla salonów i specjalistek beauty z Katowic, Chorzowa, Gliwic, Zabrza, Bytomia, Tychów, Rudy Śląskiej,
+              Sosnowca i okolic.
             </p>
             <div class="hero-actions">
               <a class="button primary" href="#kontakt">Poproś o bezpłatny mini-audyt</a>
@@ -167,12 +160,9 @@
               <span>Portfolio i opinie</span>
               <span>Jasna ścieżka kontaktu</span>
             </div>
-            <p class="hero-note" aria-label="Wyślij stronę, Instagram lub wizytówkę Google. Otrzymasz 2–3 konkretne obserwacje, co dziś może utrudniać klientkom kontakt.">
-              <span class="desktop-copy" aria-hidden="true">
-                Wyślij stronę, Instagram lub wizytówkę Google. Otrzymasz 2–3 konkretne obserwacje, co dziś może
-                utrudniać klientkom kontakt.
-              </span>
-              <span class="mobile-copy" aria-hidden="true">Wyślij stronę, Instagram lub wizytówkę Google — odeślę 2–3 konkretne obserwacje.</span>
+            <p class="hero-note">
+              Wyślij stronę, Instagram lub wizytówkę Google. Otrzymasz 2–3 konkretne obserwacje, co dziś może
+              utrudniać klientkom kontakt.
             </p>
           </div>
         </div>
@@ -469,19 +459,40 @@
           </p>
           <p class="response-note">Zwykle odpowiadam w ciągu 2 dni roboczych.</p>
         </div>
-        <div class="contact-card">
-          <h3>Co warto wysłać:</h3>
-          <ul>
-            <li>link do strony, Instagrama, Booksy lub wizytówki Google,</li>
-            <li>miasto, w którym działasz,</li>
-            <li>rodzaj usług beauty,</li>
-            <li>krótko: co dziś najbardziej przeszkadza Ci w obecnej obecności online.</li>
-          </ul>
-          <p class="contact-email">kontakt@clariobase.pl</p>
-          <a class="button primary" href="mailto:kontakt@clariobase.pl?subject=Mini-audyt%20ClarioBase">
-            Wyślij prośbę o mini-audyt
-          </a>
-        </div>
+        <form class="contact-form contact-card" action="/api/contact" method="post" data-contact-form data-recaptcha-action="mini_audit_submit" novalidate>
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="contact-name">Imię</label>
+              <input id="contact-name" name="name" type="text" autocomplete="given-name" required />
+            </div>
+            <div class="form-field">
+              <label for="contact-email">Email do odpowiedzi</label>
+              <input id="contact-email" name="email" type="email" autocomplete="email" required />
+            </div>
+            <div class="form-field form-field-wide">
+              <label for="contact-link">Link do strony / Instagrama / Booksy / wizytówki Google</label>
+              <input id="contact-link" name="link" type="url" inputmode="url" autocomplete="url" required />
+            </div>
+            <div class="form-field">
+              <label for="contact-city">Miasto</label>
+              <input id="contact-city" name="city" type="text" autocomplete="address-level2" />
+            </div>
+            <div class="form-field">
+              <label for="contact-service">Rodzaj usług beauty</label>
+              <input id="contact-service" name="service_type" type="text" autocomplete="off" />
+            </div>
+            <div class="form-field form-field-wide">
+              <label for="contact-message">Co dziś najbardziej przeszkadza Ci w obecnej obecności online?</label>
+              <textarea id="contact-message" name="message" rows="5" required></textarea>
+            </div>
+            <div class="form-honeypot" aria-hidden="true">
+              <label for="company-website">Strona firmowa</label>
+              <input id="company-website" name="company_website" type="text" autocomplete="off" tabindex="-1" />
+            </div>
+          </div>
+          <button class="button primary" type="submit">Wyślij prośbę o mini-audyt</button>
+          <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+        </form>
       </section>
     </main>
 
@@ -490,7 +501,7 @@
         <strong>ClarioBase</strong>
         <p>Strony dla salonów beauty, które budują zaufanie.</p>
       </div>
-      <a href="mailto:kontakt@clariobase.pl?subject=Mini-audyt%20ClarioBase">kontakt@clariobase.pl</a>
+      <a href="#kontakt">Kontakt przez formularz mini-audytu</a>
       <p>© 2026 ClarioBase. Wszelkie prawa zastrzeżone.</p>
     </footer>
 
