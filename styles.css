@@ -135,7 +135,7 @@ li + li {
   gap: 1.5rem;
 }
 
-.brand,
+.site-logo,
 .nav-links,
 .hero-actions,
 .site-footer {
@@ -143,16 +143,16 @@ li + li {
   align-items: center;
 }
 
-.brand {
-  gap: .75rem;
-  color: var(--ink);
-  font-weight: 900;
+.site-logo {
+  flex: 0 0 auto;
   text-decoration: none;
 }
 
-.brand img {
-  border-radius: 12px;
-  box-shadow: var(--shadow-soft);
+.site-logo img {
+  display: block;
+  width: 185px;
+  height: auto;
+  max-width: 100%;
 }
 
 .nav-links {
@@ -1071,6 +1071,10 @@ li + li {
 
   .nav {
     min-height: 72px;
+  }
+
+  .site-logo img {
+    width: 150px;
   }
 
   .nav-toggle {

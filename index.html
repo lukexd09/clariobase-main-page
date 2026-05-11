@@ -15,7 +15,9 @@
       content="strona internetowa salon beauty, strony dla salonów kosmetycznych, strona dla kosmetologa, strona dla stylistki paznokci, ClarioBase"
     />
     <link rel="canonical" href="https://clariobase.pl/" />
+    <link rel="icon" href="favicon.ico" sizes="any" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="apple-touch-icon.png" />
     <link rel="manifest" href="site.webmanifest" />
     <link rel="preload" as="image" href="assets/clariobase-hero-desktop.webp" />
     <meta name="theme-color" content="#4a332b" />
@@ -43,7 +45,7 @@
             "@id": "https://clariobase.pl/#organization",
             "name": "ClarioBase",
             "url": "https://clariobase.pl/",
-            "logo": "https://clariobase.pl/favicon.svg",
+            "logo": "https://clariobase.pl/assets/clariobase-logo-clarity-frame.webp",
             "areaServed": "Polska",
             "description": "ClarioBase tworzy strony internetowe dla małych lokalnych biznesów beauty, porządkując ofertę, portfolio, opinie, lokalizację i kontakt."
           },
@@ -109,9 +111,14 @@
 
     <header class="site-header">
       <nav class="nav" aria-label="Główna nawigacja">
-        <a class="brand" href="#top" aria-label="ClarioBase - strona główna">
-          <img src="favicon.svg" width="38" height="38" alt="" />
-          <span>ClarioBase</span>
+        <a class="site-logo" href="#top" aria-label="ClarioBase — strona główna">
+          <img
+            src="assets/clariobase-logo-clarity-frame.webp"
+            alt="ClarioBase"
+            width="185"
+            height="43"
+            decoding="async"
+          />
         </a>
         <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu" data-nav-toggle>
           <span class="sr-only">Otwórz menu</span>

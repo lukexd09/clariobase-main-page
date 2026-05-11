@@ -2,15 +2,20 @@
   "name": "ClarioBase",
   "short_name": "ClarioBase",
   "description": "Uporządkowana obecność online dla małych biznesów beauty.",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
-  "background_color": "#f7f3ea",
-  "theme_color": "#213a36",
+  "background_color": "#fbf7f0",
+  "theme_color": "#fbf7f0",
   "icons": [
     {
-      "src": "favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml"
+      "src": "assets/clariobase-favicon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/clariobase-favicon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }
