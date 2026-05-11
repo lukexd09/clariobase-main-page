@@ -815,7 +815,29 @@ li + li {
   height: 1px;
 }
 
+.form-security-note {
+  margin: 1rem 0 .5rem;
+  color: rgba(76, 55, 44, .72);
+  font-size: .85rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.turnstile-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+  margin: .25rem auto 1.25rem;
+  padding: .75rem;
+  border: 1px solid rgba(85, 62, 49, .12);
+  border-radius: 18px;
+  background: rgba(255, 250, 243, .72);
+  overflow: hidden;
+}
+
 .cf-turnstile {
+  max-width: 100%;
   min-height: 65px;
 }
 
@@ -1060,6 +1082,10 @@ li + li {
     width: 100%;
   }
 
+  .turnstile-wrap {
+    padding: .65rem .35rem;
+  }
+
   .value-grid,
   .package-grid,
   .care-grid,
@@ -1098,6 +1124,11 @@ li + li {
 
   .hero h1 {
     font-size: clamp(1.72rem, 7.6vw, 2.25rem);
+  }
+
+  .cf-turnstile {
+    transform: scale(.94);
+    transform-origin: center;
   }
 }
 

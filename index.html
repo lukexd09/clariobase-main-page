@@ -499,13 +499,18 @@
               />
             </div>
           </div>
-          <div
-            class="cf-turnstile"
-            data-sitekey="0x4AAAAAADNXfgJDrbxx5Eie"
-            data-callback="onTurnstileSuccess"
-            data-expired-callback="onTurnstileExpired"
-            data-error-callback="onTurnstileError"
-          ></div>
+          <p class="form-security-note">Formularz jest zabezpieczony przed spamem.</p>
+          <div class="turnstile-wrap">
+            <div
+              class="cf-turnstile"
+              data-sitekey="0x4AAAAAADNXfgJDrbxx5Eie"
+              data-callback="onTurnstileSuccess"
+              data-expired-callback="onTurnstileExpired"
+              data-error-callback="onTurnstileError"
+              data-theme="light"
+              data-size="normal"
+            ></div>
+          </div>
           <button class="button primary" type="submit">Wyślij prośbę o mini-audyt</button>
           <div id="form-status" class="form-status" role="status" aria-live="polite"></div>
         </form>
