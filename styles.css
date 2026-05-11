@@ -802,12 +802,21 @@ li + li {
   box-shadow: 0 0 0 4px rgba(185, 146, 95, .16);
 }
 
-.form-honeypot {
+.honeypot-field {
   position: absolute;
   left: -10000px;
   width: 1px;
   height: 1px;
   overflow: hidden;
+}
+
+.form-honeypot {
+  width: 1px;
+  height: 1px;
+}
+
+.cf-turnstile {
+  min-height: 65px;
 }
 
 .form-status {

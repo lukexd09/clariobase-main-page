@@ -1,8 +1,10 @@
 const navToggle = document.querySelector("[data-nav-toggle]");
 const navLinks = document.querySelector("[data-nav-links]");
 const year = document.querySelector("[data-year]");
-const contactForm = document.querySelector("[data-contact-form]");
-const formStatus = document.querySelector("[data-form-status]");
+const contactForm = document.querySelector("#contact-form");
+const formStatus = document.querySelector("#form-status");
+
+let turnstileReady = false;
 
 if (year) {
   year.textContent = new Date().getFullYear();
@@ -33,15 +35,27 @@ const setFormStatus = (message, type) => {
   }
 };
 
-const getRecaptchaToken = async (form) => {
-  const action = form.dataset.recaptchaAction || "mini_audit_submit";
-  const siteKey = form.dataset.recaptchaSiteKey;
-
-  if (!siteKey || !window.grecaptcha?.execute) {
-    return "";
+const resetTurnstile = () => {
+  if (window.turnstile?.reset) {
+    window.turnstile.reset();
   }
+  turnstileReady = false;
+};
 
-  return window.grecaptcha.execute(siteKey, { action });
+window.onTurnstileSuccess = () => {
+  turnstileReady = true;
+  if (formStatus?.classList.contains("is-error")) {
+    setFormStatus("", "");
+  }
+};
+
+window.onTurnstileExpired = () => {
+  turnstileReady = false;
+};
+
+window.onTurnstileError = () => {
+  turnstileReady = false;
+  setFormStatus("Potwierdź zabezpieczenie antyspamowe i spróbuj ponownie.", "error");
 };
 
 if (contactForm instanceof HTMLFormElement) {
@@ -56,29 +70,41 @@ if (contactForm instanceof HTMLFormElement) {
 
     const formData = new FormData(contactForm);
 
-    if (String(formData.get("company_website") || "").trim()) {
-      setFormStatus("Nie udało się wysłać formularza. Spróbuj ponownie później.", "error");
+    if (String(formData.get("companyWebsite") || "").trim()) {
+      setFormStatus("Dziękuję — formularz został wysłany. Odpowiem mailowo tak szybko, jak to możliwe.", "success");
+      contactForm.reset();
+      resetTurnstile();
+      return;
+    }
+
+    const turnstileToken = window.turnstile?.getResponse ? window.turnstile.getResponse() : "";
+
+    if (!turnstileToken || !turnstileReady) {
+      setFormStatus("Potwierdź zabezpieczenie antyspamowe i spróbuj ponownie.", "error");
       return;
     }
 
     const submitButton = contactForm.querySelector("button[type='submit']");
+    const defaultButtonText = submitButton?.textContent || "Wyślij prośbę o mini-audyt";
+
     submitButton?.setAttribute("disabled", "true");
-    setFormStatus("Wysyłam formularz...", "");
+    if (submitButton) {
+      submitButton.textContent = "Wysyłanie...";
+    }
+    setFormStatus("", "");
 
     try {
-      const recaptchaToken = await getRecaptchaToken(contactForm);
       const payload = {
         name: String(formData.get("name") || "").trim(),
         email: String(formData.get("email") || "").trim(),
-        link: String(formData.get("link") || "").trim(),
+        url: String(formData.get("url") || "").trim(),
         city: String(formData.get("city") || "").trim(),
-        serviceType: String(formData.get("service_type") || "").trim(),
+        serviceType: String(formData.get("serviceType") || "").trim(),
         message: String(formData.get("message") || "").trim(),
-        recaptchaAction: contactForm.dataset.recaptchaAction || "mini_audit_submit",
-        recaptchaToken
+        companyWebsite: String(formData.get("companyWebsite") || "").trim(),
+        turnstileToken
       };
 
-      // TODO: endpoint serverless must verify reCAPTCHA token server-side before sending email.
       const response = await fetch(contactForm.action, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -90,11 +116,16 @@ if (contactForm instanceof HTMLFormElement) {
       }
 
       contactForm.reset();
-      setFormStatus("Dziękuję. Formularz został wysłany.", "success");
+      resetTurnstile();
+      setFormStatus("Dziękuję — formularz został wysłany. Odpowiem mailowo tak szybko, jak to możliwe.", "success");
     } catch (error) {
-      setFormStatus("Nie udało się wysłać formularza. Spróbuj ponownie później.", "error");
+      resetTurnstile();
+      setFormStatus("Nie udało się wysłać formularza. Spróbuj ponownie za chwilę.", "error");
     } finally {
       submitButton?.removeAttribute("disabled");
+      if (submitButton) {
+        submitButton.textContent = defaultButtonText;
+      }
     }
   });
 }

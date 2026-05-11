@@ -460,7 +460,7 @@
           </p>
           <p class="response-note">Zwykle odpowiadam w ciągu 2 dni roboczych.</p>
         </div>
-        <form class="contact-form contact-card" action="/api/contact" method="post" data-contact-form data-recaptcha-action="mini_audit_submit" novalidate>
+        <form class="contact-form contact-card" id="contact-form" action="/api/contact" method="post" novalidate>
           <div class="form-grid">
             <div class="form-field">
               <label for="contact-name">Imię</label>
@@ -472,7 +472,7 @@
             </div>
             <div class="form-field form-field-wide">
               <label for="contact-link">Link do strony / Instagrama / Booksy / wizytówki Google</label>
-              <input id="contact-link" name="link" type="url" inputmode="url" autocomplete="url" required />
+              <input id="contact-link" name="url" type="url" inputmode="url" autocomplete="url" required />
             </div>
             <div class="form-field">
               <label for="contact-city">Miasto</label>
@@ -480,19 +480,34 @@
             </div>
             <div class="form-field">
               <label for="contact-service">Rodzaj usług beauty</label>
-              <input id="contact-service" name="service_type" type="text" autocomplete="off" />
+              <input id="contact-service" name="serviceType" type="text" autocomplete="off" />
             </div>
             <div class="form-field form-field-wide">
               <label for="contact-message">Co dziś najbardziej przeszkadza Ci w obecnej obecności online?</label>
               <textarea id="contact-message" name="message" rows="5" required></textarea>
             </div>
-            <div class="form-honeypot" aria-hidden="true">
+            <div class="honeypot-field" aria-hidden="true">
               <label for="company-website">Strona firmowa</label>
-              <input id="company-website" name="company_website" type="text" autocomplete="off" tabindex="-1" />
+              <input
+                id="company-website"
+                class="form-honeypot"
+                name="companyWebsite"
+                type="text"
+                autocomplete="off"
+                tabindex="-1"
+                aria-hidden="true"
+              />
             </div>
           </div>
+          <div
+            class="cf-turnstile"
+            data-sitekey="0x4AAAAAADNXfgJDrbxx5Eie"
+            data-callback="onTurnstileSuccess"
+            data-expired-callback="onTurnstileExpired"
+            data-error-callback="onTurnstileError"
+          ></div>
           <button class="button primary" type="submit">Wyślij prośbę o mini-audyt</button>
-          <p class="form-status" data-form-status role="status" aria-live="polite"></p>
+          <div id="form-status" class="form-status" role="status" aria-live="polite"></div>
         </form>
       </section>
     </main>
@@ -506,6 +521,7 @@
       <p>© 2026 ClarioBase. Wszelkie prawa zastrzeżone.</p>
     </footer>
 
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <script src="script.js" defer></script>
   </body>
 </html>
