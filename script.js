@@ -70,6 +70,13 @@ if (contactForm instanceof HTMLFormElement) {
     event.preventDefault();
     setFormStatus("", "");
 
+    const privacyAccepted = contactForm.elements.privacyAccepted;
+
+    if (privacyAccepted instanceof HTMLInputElement && !privacyAccepted.checked) {
+      setFormStatus("Potwierdź zapoznanie się z Polityką prywatności.", "error");
+      return;
+    }
+
     if (!contactForm.reportValidity()) {
       setFormStatus("Uzupełnij wymagane pola i sprawdź poprawność adresu email oraz linku.", "error");
       return;
@@ -107,6 +114,7 @@ if (contactForm instanceof HTMLFormElement) {
         serviceType: String(formData.get("serviceType") || "").trim(),
         message: String(formData.get("message") || "").trim(),
         companyWebsite: String(formData.get("companyWebsite") || "").trim(),
+        privacyAccepted: privacyAccepted instanceof HTMLInputElement && privacyAccepted.checked,
         turnstileToken
       };
 

@@ -68,7 +68,7 @@ const verifyTurnstile = async (token, remoteIp) => {
   return Boolean(result.success);
 };
 
-const sendEmail = async ({ name, email, url, city, serviceType, message }) => {
+const sendEmail = async ({ name, email, url, city, serviceType, message, privacyAccepted }) => {
   const requiredEnv = ["RESEND_API_KEY", "CONTACT_TO_EMAIL", "CONTACT_FROM_EMAIL"];
   const missingEnv = requiredEnv.filter((key) => !process.env[key]);
 
@@ -89,6 +89,12 @@ const sendEmail = async ({ name, email, url, city, serviceType, message }) => {
     ["Miasto", city || "Nie podano"],
     ["Rodzaj usług beauty", serviceType || "Nie podano"],
     ["Wiadomość", message],
+    [
+      "Polityka prywatności",
+      privacyAccepted
+        ? "Użytkownik potwierdził zapoznanie się z Polityką prywatności."
+        : "Brak potwierdzenia."
+    ],
     ["Data wysłania", sentAt],
     ["Źródło", "Formularz mini-audytu ClarioBase"]
   ];
@@ -168,8 +174,13 @@ module.exports = async function handler(req, res) {
       city: normalize(body.city, MAX_LENGTHS.city),
       serviceType: normalize(body.serviceType, MAX_LENGTHS.serviceType),
       message: normalize(body.message, MAX_LENGTHS.message),
+      privacyAccepted: body.privacyAccepted === true,
       turnstileToken: typeof body.turnstileToken === "string" ? body.turnstileToken : ""
     };
+
+    if (!data.privacyAccepted) {
+      return json(res, 400, { ok: false });
+    }
 
     if (!data.name || !data.email || !data.url || !data.message || !EMAIL_PATTERN.test(data.email)) {
       return json(res, 400, { ok: false });
