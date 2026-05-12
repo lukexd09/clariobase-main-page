@@ -117,7 +117,10 @@ if (contactForm instanceof HTMLFormElement) {
     const formData = new FormData(contactForm);
 
     if (String(formData.get("companyWebsite") || "").trim()) {
-      setFormStatus("Dziękuję — formularz został wysłany. Odpowiem mailowo tak szybko, jak to możliwe.", "success");
+      setFormStatus(
+        "Dziękuję — prośba o mini-audyt została wysłana. Wrócę z odpowiedzią zazwyczaj w ciągu 1–2 dni roboczych.",
+        "success"
+      );
       contactForm.reset();
       if (privacyAccepted instanceof HTMLInputElement) {
         setPrivacyError(privacyAccepted, "");
@@ -170,7 +173,10 @@ if (contactForm instanceof HTMLFormElement) {
         setPrivacyError(privacyAccepted, "");
       }
       resetTurnstile();
-      setFormStatus("Dziękuję — formularz został wysłany. Odpowiem mailowo tak szybko, jak to możliwe.", "success");
+      setFormStatus(
+        "Dziękuję — prośba o mini-audyt została wysłana. Wrócę z odpowiedzią zazwyczaj w ciągu 1–2 dni roboczych.",
+        "success"
+      );
     } catch (error) {
       resetTurnstile();
       setFormStatus("Nie udało się wysłać formularza. Spróbuj ponownie za chwilę.", "error");

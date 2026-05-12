@@ -68,13 +68,43 @@ const verifyTurnstile = async (token, remoteIp) => {
   return Boolean(result.success);
 };
 
-const sendEmail = async ({ name, email, url, city, serviceType, message, privacyAccepted }) => {
-  const requiredEnv = ["RESEND_API_KEY", "CONTACT_TO_EMAIL", "CONTACT_FROM_EMAIL"];
-  const missingEnv = requiredEnv.filter((key) => !process.env[key]);
+const sendResendEmail = async (payload, options = {}) => {
+  const { logErrorBody = true } = options;
 
-  if (missingEnv.length) {
+  const resendResponse = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  if (!resendResponse.ok) {
+    const resendErrorBody = await resendResponse.text();
+
+    if (logErrorBody) {
+      console.error("Resend send failed", {
+        status: resendResponse.status,
+        body: resendErrorBody
+      });
+    }
+
+    const error = new Error("Email delivery failed");
+    error.code = "EMAIL_DELIVERY_FAILED";
+    error.status = resendResponse.status;
+    throw error;
+  }
+};
+
+const sendEmail = async ({ name, email, url, city, serviceType, message, privacyAccepted }) => {
+  if (!process.env.RESEND_API_KEY) {
     throw new Error("Missing email configuration");
   }
+
+  const toEmail = process.env.CONTACT_TO_EMAIL || "kontakt@clariobase.pl";
+  const fromEmail = process.env.CONTACT_FROM_EMAIL || "ClarioBase <kontakt@clariobase.pl>";
+  const replyEmail = "kontakt@clariobase.pl";
 
   const sentAt = new Date().toLocaleString("pl-PL", {
     dateStyle: "long",
@@ -83,12 +113,12 @@ const sendEmail = async ({ name, email, url, city, serviceType, message, privacy
   });
 
   const rows = [
-    ["Imię", name],
+    ["Imię i nazwisko", name],
     ["Email", email],
-    ["Link", url],
+    ["Link do strony / Instagrama / Booksy / wizytówki Google", url],
     ["Miasto", city || "Nie podano"],
-    ["Rodzaj usług beauty", serviceType || "Nie podano"],
-    ["Wiadomość", message],
+    ["Rodzaj usługi beauty", serviceType || "Nie podano"],
+    ["Opis problemu", message],
     [
       "Polityka prywatności",
       privacyAccepted
@@ -110,39 +140,56 @@ const sendEmail = async ({ name, email, url, city, serviceType, message, privacy
     )
     .join("");
 
-  const resendResponse = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      from: process.env.CONTACT_FROM_EMAIL,
-      to: [process.env.CONTACT_TO_EMAIL],
-      reply_to: email,
-      subject: "Nowy mini-audyt ClarioBase",
-      text,
-      html: `
-        <div style="font-family:Arial,sans-serif;line-height:1.5;color:#3a2923;">
-          <h1 style="font-size:22px;margin:0 0 16px;">Nowy mini-audyt ClarioBase</h1>
-          <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;max-width:680px;background:#fffaf2;border:1px solid #eaded0;">
-            ${htmlRows}
-          </table>
-        </div>`
-    })
+  await sendResendEmail({
+    from: fromEmail,
+    to: [toEmail],
+    reply_to: email,
+    subject: "Nowa prośba o mini-audyt — ClarioBase",
+    text,
+    html: `
+      <div style="font-family:Arial,sans-serif;line-height:1.5;color:#3a2923;">
+        <h1 style="font-size:22px;margin:0 0 16px;">Nowa prośba o mini-audyt — ClarioBase</h1>
+        <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;max-width:680px;background:#fffaf2;border:1px solid #eaded0;">
+          ${htmlRows}
+        </table>
+      </div>`
   });
 
-  if (!resendResponse.ok) {
-    const resendErrorBody = await resendResponse.text();
+  try {
+    const autoresponderText = [
+      "Dzień dobry,",
+      "",
+      "dziękuję za wysłanie prośby o mini-audyt.",
+      "",
+      "Wrócę z krótką odpowiedzią i 2–3 konkretnymi obserwacjami zazwyczaj w ciągu 1–2 dni roboczych.",
+      "",
+      "Pozdrawiam",
+      "Łukasz Chmiel",
+      "ClarioBase"
+    ].join("\n");
 
-    console.error("Resend send failed", {
-      status: resendResponse.status,
-      body: resendErrorBody
+    await sendResendEmail(
+      {
+        from: fromEmail,
+        to: [email],
+        reply_to: replyEmail,
+        subject: "Dziękuję za prośbę o mini-audyt — ClarioBase",
+        text: autoresponderText,
+        html: `
+          <div style="font-family:Arial,sans-serif;line-height:1.6;color:#3a2923;">
+            <p>Dzień dobry,</p>
+            <p>dziękuję za wysłanie prośby o mini-audyt.</p>
+            <p>Wrócę z krótką odpowiedzią i 2–3 konkretnymi obserwacjami zazwyczaj w ciągu 1–2 dni roboczych.</p>
+            <p>Pozdrawiam<br>Łukasz Chmiel<br>ClarioBase</p>
+          </div>`
+      },
+      { logErrorBody: false }
+    );
+  } catch (error) {
+    console.warn("Resend autoresponder failed", {
+      code: error.code || "UNKNOWN_AUTORESPONDER_ERROR",
+      status: error.status || null
     });
-
-    const error = new Error("Email delivery failed");
-    error.code = "EMAIL_DELIVERY_FAILED";
-    throw error;
   }
 };
 
