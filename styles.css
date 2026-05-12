@@ -745,6 +745,7 @@ li + li {
   display: block;
   color: #2f211a;
   font-size: .95rem;
+  font-weight: 700;
 }
 
 .about-point span {
