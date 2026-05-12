@@ -162,7 +162,7 @@ const sendEmail = async ({ name, email, url, city, serviceType, message, privacy
   ];
 
   const adminText = [
-    "Nowa prośba o mini-audyt — ClarioBase",
+    "Nowa prośba o mini-audyt",
     "",
     "Dane kontaktowe",
     `Imię i nazwisko: ${name}`,
@@ -214,7 +214,7 @@ const sendEmail = async ({ name, email, url, city, serviceType, message, privacy
     from: fromEmail,
     to: [toEmail],
     reply_to: email,
-    subject: "Nowa prośba o mini-audyt — ClarioBase",
+    subject: "Nowa prośba o mini-audyt",
     text: adminText,
     html: adminHtml
   });
@@ -224,18 +224,18 @@ const sendEmail = async ({ name, email, url, city, serviceType, message, privacy
       "ClarioBase",
       "Mini-audyt strony dla branży beauty",
       "",
-      "Dziękuję — prośba o mini-audyt dotarła.",
+      "Prośba o mini-audyt dotarła.",
       "",
       "Dzień dobry,",
       "",
-      "dziękuję za przesłanie formularza. Sprawdzę podany link i wrócę z krótką odpowiedzią zawierającą 2–3 konkretne obserwacje.",
+      "dziękuję za przesłanie formularza. Sprawdzę podany link i wrócę z krótką odpowiedzią zawierającą 2-3 konkretne obserwacje.",
       "",
       "Co dalej?",
       "1. Sprawdzę stronę, Instagram, Booksy albo wizytówkę Google.",
       "2. Zwrócę uwagę na jasność oferty, wiarygodność i ścieżkę do umówienia wizyty.",
       "3. Odeślę pierwszy sensowny krok, od którego warto zacząć.",
       "",
-      "Zazwyczaj odpowiadam w ciągu 1–2 dni roboczych.",
+      "Zazwyczaj odpowiadam w ciągu 1-2 dni roboczych.",
       "",
       "Pozdrawiam",
       "Łukasz Chmiel",
@@ -254,16 +254,16 @@ const sendEmail = async ({ name, email, url, city, serviceType, message, privacy
                   <td style="padding:34px 30px 10px;">
                     <div style="color:#2f211a;font-size:18px;line-height:1.2;font-weight:800;">ClarioBase</div>
                     <div style="margin-top:8px;color:#8f5646;font-size:12px;line-height:1.4;text-transform:uppercase;letter-spacing:.12em;font-weight:800;">Mini-audyt strony dla branży beauty</div>
-                    <h1 style="margin:24px 0 16px;color:#2f211a;font-size:26px;line-height:1.16;">Dziękuję — prośba o mini-audyt dotarła.</h1>
+                    <h1 style="margin:24px 0 16px;color:#2f211a;font-size:26px;line-height:1.16;">Prośba o mini-audyt dotarła.</h1>
                     <p style="margin:0 0 14px;color:#4c372c;font-size:16px;line-height:1.7;">Dzień dobry,</p>
-                    <p style="margin:0 0 20px;color:#4c372c;font-size:16px;line-height:1.7;">dziękuję za przesłanie formularza. Sprawdzę podany link i wrócę z krótką odpowiedzią zawierającą 2–3 konkretne obserwacje.</p>
+                    <p style="margin:0 0 20px;color:#4c372c;font-size:16px;line-height:1.7;">dziękuję za przesłanie formularza. Sprawdzę podany link i wrócę z krótką odpowiedzią zawierającą 2-3 konkretne obserwacje.</p>
                     <h2 style="margin:24px 0 12px;color:#2f211a;font-size:18px;line-height:1.3;">Co dalej?</h2>
                     <ol style="margin:0 0 22px;padding-left:20px;color:#4c372c;font-size:15px;line-height:1.75;">
                       <li>Sprawdzę stronę, Instagram, Booksy albo wizytówkę Google.</li>
                       <li>Zwrócę uwagę na jasność oferty, wiarygodność i ścieżkę do umówienia wizyty.</li>
                       <li>Odeślę pierwszy sensowny krok, od którego warto zacząć.</li>
                     </ol>
-                    <p style="margin:0 0 24px;padding:14px 16px;border-radius:16px;background:#f3eadf;color:#4c372c;font-size:15px;line-height:1.6;">Zazwyczaj odpowiadam w ciągu 1–2 dni roboczych.</p>
+                    <p style="margin:0 0 24px;padding:14px 16px;border-radius:16px;background:#f3eadf;color:#4c372c;font-size:15px;line-height:1.6;">Zazwyczaj odpowiadam w ciągu 1-2 dni roboczych.</p>
                     <p style="margin:0;color:#4c372c;font-size:16px;line-height:1.7;">Pozdrawiam<br><strong>Łukasz Chmiel</strong><br>ClarioBase</p>
                   </td>
                 </tr>
@@ -283,7 +283,7 @@ const sendEmail = async ({ name, email, url, city, serviceType, message, privacy
         from: fromEmail,
         to: [email],
         reply_to: replyEmail,
-        subject: "Dziękuję — prośba o mini-audyt dotarła",
+        subject: "Dziękuję za prośbę o mini-audyt",
         text: autoresponderText,
         html: autoresponderHtml
       },
