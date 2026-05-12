@@ -28,6 +28,22 @@ const escapeHtml = (value) =>
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
 
+const textValue = (value) => value || "Nie podano";
+
+const renderInfoRow = (label, value) => `
+  <tr>
+    <td style="padding:0 0 6px;color:#7a5b4c;font-size:12px;line-height:1.4;text-transform:uppercase;letter-spacing:.06em;font-weight:700;">${escapeHtml(label)}</td>
+  </tr>
+  <tr>
+    <td style="padding:0 0 18px;color:#2f211a;font-size:15px;line-height:1.55;">${escapeHtml(value).replaceAll("\n", "<br>")}</td>
+  </tr>`;
+
+const renderSection = (title, rows) => `
+  <tr>
+    <td style="padding:22px 0 8px;border-top:1px solid #eaded0;color:#8f5646;font-size:13px;line-height:1.4;text-transform:uppercase;letter-spacing:.08em;font-weight:800;">${escapeHtml(title)}</td>
+  </tr>
+  ${rows.map(([label, value]) => renderInfoRow(label, value)).join("")}`;
+
 const parseBody = (req) => {
   if (!req.body) return {};
   if (typeof req.body === "object") return req.body;
@@ -112,76 +128,164 @@ const sendEmail = async ({ name, email, url, city, serviceType, message, privacy
     timeZone: "Europe/Warsaw"
   });
 
-  const rows = [
-    ["Imię i nazwisko", name],
-    ["Email", email],
-    ["Link do strony / Instagrama / Booksy / wizytówki Google", url],
-    ["Miasto", city || "Nie podano"],
-    ["Rodzaj usługi beauty", serviceType || "Nie podano"],
-    ["Opis problemu", message],
-    [
-      "Polityka prywatności",
-      privacyAccepted
-        ? "Użytkownik potwierdził zapoznanie się z Polityką prywatności: tak"
-        : "Brak potwierdzenia."
-    ],
-    ["Data wysłania", sentAt],
-    ["Źródło", "Formularz mini-audytu ClarioBase"]
+  const adminSections = [
+    {
+      title: "Dane kontaktowe",
+      rows: [
+        ["Imię i nazwisko", name],
+        ["Email", email]
+      ]
+    },
+    {
+      title: "Link / obecność online",
+      rows: [["Link", url]]
+    },
+    {
+      title: "Kontekst",
+      rows: [
+        ["Miasto", textValue(city)],
+        ["Rodzaj usługi beauty", textValue(serviceType)],
+        ["Data wysłania", sentAt],
+        [
+          "Polityka prywatności",
+          privacyAccepted
+            ? "Użytkownik potwierdził zapoznanie się z Polityką prywatności: tak"
+            : "Brak potwierdzenia."
+        ],
+        ["Źródło", "Formularz mini-audytu ClarioBase"]
+      ]
+    },
+    {
+      title: "Treść zgłoszenia",
+      rows: [["Co dziś przeszkadza", message]]
+    }
   ];
 
-  const text = rows.map(([label, value]) => `${label}: ${value}`).join("\n\n");
-  const htmlRows = rows
-    .map(
-      ([label, value]) => `
+  const adminText = [
+    "Nowa prośba o mini-audyt — ClarioBase",
+    "",
+    "Dane kontaktowe",
+    `Imię i nazwisko: ${name}`,
+    `Email: ${email}`,
+    "",
+    "Link / obecność online",
+    `Link: ${url}`,
+    "",
+    "Kontekst",
+    `Miasto: ${textValue(city)}`,
+    `Rodzaj usługi beauty: ${textValue(serviceType)}`,
+    `Data wysłania: ${sentAt}`,
+    `Polityka prywatności: ${
+      privacyAccepted ? "Użytkownik potwierdził zapoznanie się z Polityką prywatności: tak" : "Brak potwierdzenia."
+    }`,
+    "Źródło: Formularz mini-audytu ClarioBase",
+    "",
+    "Treść zgłoszenia",
+    `Co dziś przeszkadza: ${message}`
+  ].join("\n");
+
+  const adminHtml = `
+    <div style="margin:0;padding:28px;background:#fbf7f0;font-family:Arial,sans-serif;color:#2f211a;">
+      <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
         <tr>
-          <th align="left" style="padding:8px 12px;border-bottom:1px solid #eaded0;color:#3a2923;">${escapeHtml(label)}</th>
-          <td style="padding:8px 12px;border-bottom:1px solid #eaded0;color:#3a2923;">${escapeHtml(value).replaceAll("\n", "<br>")}</td>
-        </tr>`
-    )
-    .join("");
+          <td align="center">
+            <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;max-width:680px;border-collapse:collapse;background:#fffaf3;border:1px solid #eaded0;border-radius:22px;">
+              <tr>
+                <td style="padding:30px 30px 10px;">
+                  <div style="color:#8f5646;font-size:13px;line-height:1.4;text-transform:uppercase;letter-spacing:.12em;font-weight:800;">ClarioBase</div>
+                  <h1 style="margin:10px 0 10px;color:#2f211a;font-size:24px;line-height:1.18;">Nowa prośba o mini-audyt</h1>
+                  <p style="margin:0;color:#6f5649;font-size:15px;line-height:1.65;">Wiadomość przyszła z formularza ClarioBase. Odpowiedź na tego maila powinna trafić do osoby z formularza.</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:4px 30px 30px;">
+                  <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
+                    ${adminSections.map((section) => renderSection(section.title, section.rows)).join("")}
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>`;
 
   await sendResendEmail({
     from: fromEmail,
     to: [toEmail],
     reply_to: email,
     subject: "Nowa prośba o mini-audyt — ClarioBase",
-    text,
-    html: `
-      <div style="font-family:Arial,sans-serif;line-height:1.5;color:#3a2923;">
-        <h1 style="font-size:22px;margin:0 0 16px;">Nowa prośba o mini-audyt — ClarioBase</h1>
-        <table cellpadding="0" cellspacing="0" style="border-collapse:collapse;width:100%;max-width:680px;background:#fffaf2;border:1px solid #eaded0;">
-          ${htmlRows}
-        </table>
-      </div>`
+    text: adminText,
+    html: adminHtml
   });
 
   try {
     const autoresponderText = [
+      "ClarioBase",
+      "Mini-audyt strony dla branży beauty",
+      "",
+      "Dziękuję — prośba o mini-audyt dotarła.",
+      "",
       "Dzień dobry,",
       "",
-      "dziękuję za wysłanie prośby o mini-audyt.",
+      "dziękuję za przesłanie formularza. Sprawdzę podany link i wrócę z krótką odpowiedzią zawierającą 2–3 konkretne obserwacje.",
       "",
-      "Wrócę z krótką odpowiedzią i 2–3 konkretnymi obserwacjami zazwyczaj w ciągu 1–2 dni roboczych.",
+      "Co dalej?",
+      "1. Sprawdzę stronę, Instagram, Booksy albo wizytówkę Google.",
+      "2. Zwrócę uwagę na jasność oferty, wiarygodność i ścieżkę do umówienia wizyty.",
+      "3. Odeślę pierwszy sensowny krok, od którego warto zacząć.",
+      "",
+      "Zazwyczaj odpowiadam w ciągu 1–2 dni roboczych.",
       "",
       "Pozdrawiam",
       "Łukasz Chmiel",
-      "ClarioBase"
+      "ClarioBase",
+      "",
+      "Ta wiadomość została wysłana automatycznie po przesłaniu formularza mini-audytu na stronie ClarioBase."
     ].join("\n");
+
+    const autoresponderHtml = `
+      <div style="margin:0;padding:28px;background:#fbf7f0;font-family:Arial,sans-serif;color:#2f211a;">
+        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
+          <tr>
+            <td align="center">
+              <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;max-width:600px;border-collapse:collapse;background:#fffaf3;border:1px solid #eaded0;border-radius:22px;">
+                <tr>
+                  <td style="padding:34px 30px 10px;">
+                    <div style="color:#2f211a;font-size:18px;line-height:1.2;font-weight:800;">ClarioBase</div>
+                    <div style="margin-top:8px;color:#8f5646;font-size:12px;line-height:1.4;text-transform:uppercase;letter-spacing:.12em;font-weight:800;">Mini-audyt strony dla branży beauty</div>
+                    <h1 style="margin:24px 0 16px;color:#2f211a;font-size:26px;line-height:1.16;">Dziękuję — prośba o mini-audyt dotarła.</h1>
+                    <p style="margin:0 0 14px;color:#4c372c;font-size:16px;line-height:1.7;">Dzień dobry,</p>
+                    <p style="margin:0 0 20px;color:#4c372c;font-size:16px;line-height:1.7;">dziękuję za przesłanie formularza. Sprawdzę podany link i wrócę z krótką odpowiedzią zawierającą 2–3 konkretne obserwacje.</p>
+                    <h2 style="margin:24px 0 12px;color:#2f211a;font-size:18px;line-height:1.3;">Co dalej?</h2>
+                    <ol style="margin:0 0 22px;padding-left:20px;color:#4c372c;font-size:15px;line-height:1.75;">
+                      <li>Sprawdzę stronę, Instagram, Booksy albo wizytówkę Google.</li>
+                      <li>Zwrócę uwagę na jasność oferty, wiarygodność i ścieżkę do umówienia wizyty.</li>
+                      <li>Odeślę pierwszy sensowny krok, od którego warto zacząć.</li>
+                    </ol>
+                    <p style="margin:0 0 24px;padding:14px 16px;border-radius:16px;background:#f3eadf;color:#4c372c;font-size:15px;line-height:1.6;">Zazwyczaj odpowiadam w ciągu 1–2 dni roboczych.</p>
+                    <p style="margin:0;color:#4c372c;font-size:16px;line-height:1.7;">Pozdrawiam<br><strong>Łukasz Chmiel</strong><br>ClarioBase</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:24px 30px 30px;">
+                    <p style="margin:0;padding-top:18px;border-top:1px solid #eaded0;color:#80665a;font-size:12px;line-height:1.6;">Ta wiadomość została wysłana automatycznie po przesłaniu formularza mini-audytu na stronie ClarioBase.</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>`;
 
     await sendResendEmail(
       {
         from: fromEmail,
         to: [email],
         reply_to: replyEmail,
-        subject: "Dziękuję za prośbę o mini-audyt — ClarioBase",
+        subject: "Dziękuję — prośba o mini-audyt dotarła",
         text: autoresponderText,
-        html: `
-          <div style="font-family:Arial,sans-serif;line-height:1.6;color:#3a2923;">
-            <p>Dzień dobry,</p>
-            <p>dziękuję za wysłanie prośby o mini-audyt.</p>
-            <p>Wrócę z krótką odpowiedzią i 2–3 konkretnymi obserwacjami zazwyczaj w ciągu 1–2 dni roboczych.</p>
-            <p>Pozdrawiam<br>Łukasz Chmiel<br>ClarioBase</p>
-          </div>`
+        html: autoresponderHtml
       },
       { logErrorBody: false }
     );
