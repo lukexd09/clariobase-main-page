@@ -252,8 +252,8 @@ const sendEmail = async ({ name, email, url, city, serviceType, message, privacy
               <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;max-width:600px;border-collapse:collapse;background:#fffaf3;border:1px solid #eaded0;border-radius:22px;">
                 <tr>
                   <td style="padding:34px 30px 10px;">
-                    <div style="color:#2f211a;font-size:18px;line-height:1.2;font-weight:800;">ClarioBase</div>
-                    <div style="margin-top:8px;color:#8f5646;font-size:12px;line-height:1.4;text-transform:uppercase;letter-spacing:.12em;font-weight:800;">Mini-audyt strony dla branży beauty</div>
+                    <div style="color:#2f211a;font-size:20px;line-height:1.2;font-weight:700;letter-spacing:-.02em;">ClarioBase</div>
+                    <div style="margin-top:8px;color:#8f5a49;font-size:12px;line-height:1.4;text-transform:uppercase;letter-spacing:.08em;font-weight:700;">Mini-audyt strony dla branży beauty</div>
                     <h1 style="margin:24px 0 16px;color:#2f211a;font-size:26px;line-height:1.16;">Prośba o mini-audyt dotarła.</h1>
                     <p style="margin:0 0 14px;color:#4c372c;font-size:16px;line-height:1.7;">Dzień dobry,</p>
                     <p style="margin:0 0 20px;color:#4c372c;font-size:16px;line-height:1.7;">dziękuję za przesłanie formularza. Sprawdzę podany link i wrócę z krótką odpowiedzią zawierającą 2-3 konkretne obserwacje.</p>
