@@ -247,54 +247,50 @@ const sendEmail = async ({ name, email, url, city, serviceType, message, privacy
 
     const autoresponderHtml = `
       <style>
-        body, table, td, p, div, span, li {
+        body, table, td, p, div, span {
+          font-family: Arial, Helvetica, sans-serif;
           text-align: left;
           letter-spacing: normal;
           word-spacing: normal;
           word-break: normal;
-          overflow-wrap: normal;
-          -webkit-hyphens: none;
-          -moz-hyphens: none;
-          -ms-hyphens: none;
-          hyphens: none;
-          mso-hyphenate: none;
+          white-space: normal;
         }
       </style>
-      <div style="margin:0;padding:28px;background:#fbf7f0;font-family:Arial,sans-serif;color:#2f211a;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;overflow-wrap:normal;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none;mso-hyphenate:none;">
-        <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse;">
-          <tr>
-            <td align="center">
-              <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;max-width:600px;border-collapse:collapse;background:#fffaf3;border:1px solid #eaded0;border-radius:22px;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;overflow-wrap:normal;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none;mso-hyphenate:none;">
-                <tr>
-                  <td style="padding:34px 30px 10px;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;overflow-wrap:normal;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none;mso-hyphenate:none;">
-                    <div style="color:#2f211a;font-size:20px;line-height:1.2;font-weight:700;letter-spacing:-.02em;">ClarioBase</div>
-                    <div style="margin-top:8px;color:#8f5a49;font-size:12px;line-height:1.4;text-transform:uppercase;letter-spacing:.04em;font-weight:700;word-spacing:normal;word-break:normal;overflow-wrap:normal;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none;mso-hyphenate:none;text-align:left;">Mini-audyt dla branży beauty</div>
-                    <h1 style="margin:24px 0 16px;color:#2f211a;font-size:26px;line-height:1.16;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;overflow-wrap:normal;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none;mso-hyphenate:none;">Prośba o mini-audyt dotarła.</h1>
-                    <p style="margin:0 0 14px;color:#4c372c;font-size:16px;line-height:1.7;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;overflow-wrap:normal;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none;mso-hyphenate:none;">Dzień dobry,</p>
-                    <p style="margin:0 0 20px;color:#4c372c;font-size:16px;line-height:1.7;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;overflow-wrap:normal;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none;mso-hyphenate:none;">dziękuję za przesłanie formularza. Sprawdzę podany link i wrócę z krótką odpowiedzią.</p>
-                    <h2 style="margin:24px 0 12px;color:#2f211a;font-size:18px;line-height:1.3;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;overflow-wrap:normal;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none;mso-hyphenate:none;">Co dalej?</h2>
-                    <ol style="margin:0 0 22px;padding-left:20px;color:#4c372c;font-size:15px;line-height:1.75;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;overflow-wrap:normal;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none;mso-hyphenate:none;">
-                      <li>Sprawdzę stronę, Instagram, Booksy albo wizytówkę Google.</li>
-                      <li>Sprawdzę jasność usług, wiarygodność i ścieżkę do umówienia wizyty.</li>
-                      <li>Odeślę pierwszy sensowny krok, od którego warto zacząć.</li>
-                    </ol>
-                    <div style="margin:24px 0;padding:14px 16px;border:1px solid #eadfce;border-radius:14px;background:#fbf7f0;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;overflow-wrap:normal;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none;mso-hyphenate:none;">
-                      <div style="font-weight:700;color:#2f211a;margin-bottom:4px;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;overflow-wrap:normal;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none;mso-hyphenate:none;">Czas odpowiedzi</div>
-                      <div style="color:#6f6258;line-height:1.55;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;overflow-wrap:normal;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none;mso-hyphenate:none;">Zazwyczaj odpowiadam w ciągu 1-2 dni roboczych. W odpowiedzi otrzymasz 2-3 konkretne obserwacje i pierwszy sensowny krok.</div>
-                    </div>
-                    <p style="margin:0;color:#4c372c;font-size:16px;line-height:1.7;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;overflow-wrap:normal;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none;mso-hyphenate:none;">Pozdrawiam<br><strong>Łukasz Chmiel</strong><br>ClarioBase</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="padding:24px 30px 30px;">
-                    <p style="margin:0;padding-top:18px;border-top:1px solid #eaded0;color:#80665a;font-size:12px;line-height:1.6;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;overflow-wrap:normal;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none;mso-hyphenate:none;">Ta wiadomość została wysłana automatycznie po przesłaniu formularza mini-audytu na stronie ClarioBase.</p>
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
-        </table>
-      </div>`;
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fbf7f0;margin:0;padding:24px 0;border-collapse:collapse;">
+        <tr>
+          <td align="center" style="font-family:Arial, Helvetica, sans-serif;text-align:center;">
+            <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:600px;background:#fffaf3;border:1px solid #eadfce;border-collapse:collapse;">
+              <tr>
+                <td style="padding:32px;font-family:Arial, Helvetica, sans-serif;color:#2f211a;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;white-space:normal;">
+                  <p style="margin:0;font-family:Arial, Helvetica, sans-serif;color:#2f211a;font-size:20px;line-height:1.25;font-weight:bold;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;white-space:normal;">ClarioBase</p>
+                  <p style="margin:8px 0 0 0;font-family:Arial, Helvetica, sans-serif;color:#8f5a49;font-size:12px;line-height:1.4;text-transform:uppercase;letter-spacing:.03em;word-spacing:normal;word-break:normal;white-space:normal;text-align:left;">Mini-audyt dla branży beauty</p>
+                  <p style="margin:24px 0 16px 0;font-family:Arial, Helvetica, sans-serif;color:#2f211a;font-size:26px;line-height:1.2;font-weight:bold;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;white-space:normal;">Prośba o mini-audyt dotarła.</p>
+                  <p style="margin:0 0 14px 0;font-family:Arial, Helvetica, sans-serif;color:#4c372c;font-size:16px;line-height:1.7;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;white-space:normal;">Dzień dobry,</p>
+                  <p style="margin:0 0 20px 0;font-family:Arial, Helvetica, sans-serif;color:#4c372c;font-size:16px;line-height:1.7;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;white-space:normal;">dziękuję za przesłanie formularza. Sprawdzę podany link i wrócę z krótką odpowiedzią.</p>
+                  <p style="margin:24px 0 12px 0;font-family:Arial, Helvetica, sans-serif;color:#2f211a;font-size:18px;line-height:1.3;font-weight:bold;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;white-space:normal;">Co dalej?</p>
+                  <p style="margin:0 0 8px 0;font-family:Arial, Helvetica, sans-serif;color:#4c372c;font-size:15px;line-height:1.7;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;white-space:normal;">1. Sprawdzę stronę, Instagram, Booksy albo wizytówkę Google.</p>
+                  <p style="margin:0 0 8px 0;font-family:Arial, Helvetica, sans-serif;color:#4c372c;font-size:15px;line-height:1.7;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;white-space:normal;">2. Sprawdzę jasność usług, wiarygodność i ścieżkę do umówienia wizyty.</p>
+                  <p style="margin:0;font-family:Arial, Helvetica, sans-serif;color:#4c372c;font-size:15px;line-height:1.7;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;white-space:normal;">3. Odeślę pierwszy sensowny krok, od którego warto zacząć.</p>
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;background:#fbf7f0;border:1px solid #eadfce;border-collapse:collapse;">
+                    <tr>
+                      <td style="padding:14px 16px;font-family:Arial, Helvetica, sans-serif;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;white-space:normal;">
+                        <p style="margin:0 0 4px 0;font-family:Arial, Helvetica, sans-serif;font-weight:bold;color:#2f211a;line-height:1.4;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;white-space:normal;">Czas odpowiedzi</p>
+                        <p style="margin:0;font-family:Arial, Helvetica, sans-serif;color:#6f6258;font-size:15px;line-height:1.5;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;white-space:normal;">Zazwyczaj odpowiadam w ciągu 1-2 dni roboczych. W odpowiedzi otrzymasz 2-3 konkretne obserwacje i pierwszy sensowny krok.</p>
+                      </td>
+                    </tr>
+                  </table>
+                  <p style="margin:0;font-family:Arial, Helvetica, sans-serif;color:#4c372c;font-size:16px;line-height:1.7;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;white-space:normal;">Pozdrawiam<br><strong>Łukasz Chmiel</strong><br>ClarioBase</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:0 32px 32px 32px;font-family:Arial, Helvetica, sans-serif;text-align:left;">
+                  <p style="margin:0;padding-top:18px;border-top:1px solid #eaded0;font-family:Arial, Helvetica, sans-serif;color:#80665a;font-size:12px;line-height:1.6;text-align:left;letter-spacing:normal;word-spacing:normal;word-break:normal;white-space:normal;">Ta wiadomość została wysłana automatycznie po przesłaniu formularza mini-audytu na stronie ClarioBase.</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>`;
 
     await sendResendEmail(
       {
