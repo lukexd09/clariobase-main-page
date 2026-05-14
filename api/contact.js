@@ -242,7 +242,7 @@ const sendEmail = async ({ name, email, url, city, serviceType, message, privacy
       "Łukasz Chmiel",
       "ClarioBase",
       "",
-      "Wiadomość automatyczna po przesłaniu formularza na stronie ClarioBase.",
+      "To automatyczne potwierdzenie wysłania formularza na stronie ClarioBase.",
       "Możesz odpowiedzieć na tego maila, jeśli chcesz doprecyzować zgłoszenie."
     ].join("\n");
 
@@ -297,7 +297,7 @@ const sendEmail = async ({ name, email, url, city, serviceType, message, privacy
                   3. Odeślę pierwszy sensowny krok, od którego warto zacząć.
                 </p>
 
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; margin:0 0 30px 0; background:#fbf7f0; border:1px solid #eadfce;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; margin:0 0 34px 0; background:#fbf7f0; border:1px solid #eadfce;">
                   <tr>
                     <td style="padding:16px 18px; font-family:Arial, Helvetica, sans-serif; text-align:left;">
                       <p style="margin:0 0 6px 0; font-family:Arial, Helvetica, sans-serif; font-size:15px; line-height:1.4; font-weight:bold; color:#2f211a; text-align:left;">
@@ -310,25 +310,29 @@ const sendEmail = async ({ name, email, url, city, serviceType, message, privacy
                   </tr>
                 </table>
 
-                <p style="margin:0 0 3px 0; font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.5; color:#2f211a; text-align:left;">
-                  Pozdrawiam
-                </p>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; margin:0 0 46px 0;">
+                  <tr>
+                    <td style="font-family:Arial, Helvetica, sans-serif; text-align:left;">
+                      <p style="margin:0 0 10px 0; font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.5; color:#2f211a; text-align:left;">
+                        Pozdrawiam
+                      </p>
+                      <p style="margin:0 0 2px 0; font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.45; font-weight:bold; color:#2f211a; text-align:left;">
+                        Łukasz Chmiel
+                      </p>
+                      <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:14px; line-height:1.45; color:#6f6258; text-align:left;">
+                        ClarioBase
+                      </p>
+                    </td>
+                  </tr>
+                </table>
 
-                <p style="margin:0 0 2px 0; font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.5; font-weight:bold; color:#2f211a; text-align:left;">
-                  Łukasz Chmiel
-                </p>
-
-                <p style="margin:0 0 34px 0; font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.5; color:#2f211a; text-align:left;">
-                  ClarioBase
-                </p>
-
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; border-top:1px solid #eadfce;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; border-top:1px solid #eee3d2;">
                   <tr>
                     <td style="padding-top:18px; font-family:Arial, Helvetica, sans-serif; text-align:left;">
-                      <p style="margin:0 0 4px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:1.5; color:#7a6e64; text-align:left;">
-                        Wiadomość automatyczna po przesłaniu formularza na stronie ClarioBase.
+                      <p style="margin:0 0 4px 0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:1.55; color:#7f7368; text-align:left;">
+                        To automatyczne potwierdzenie wysłania formularza na stronie ClarioBase.
                       </p>
-                      <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:1.5; color:#7a6e64; text-align:left;">
+                      <p style="margin:0; font-family:Arial, Helvetica, sans-serif; font-size:12px; line-height:1.55; color:#7f7368; text-align:left;">
                         Możesz odpowiedzieć na tego maila, jeśli chcesz doprecyzować zgłoszenie.
                       </p>
                     </td>
