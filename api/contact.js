@@ -310,7 +310,13 @@ const sendEmail = async ({ name, email, url, city, serviceType, message, privacy
                   </tr>
                 </table>
 
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; margin:0 0 46px 0;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td height="30" style="height:30px; line-height:30px; font-size:0;">&nbsp;</td>
+                  </tr>
+                </table>
+
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;">
                   <tr>
                     <td style="font-family:Arial, Helvetica, sans-serif; text-align:left;">
                       <p style="margin:0 0 10px 0; font-family:Arial, Helvetica, sans-serif; font-size:16px; line-height:1.5; color:#2f211a; text-align:left;">
@@ -323,6 +329,12 @@ const sendEmail = async ({ name, email, url, city, serviceType, message, privacy
                         ClarioBase
                       </p>
                     </td>
+                  </tr>
+                </table>
+
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td height="42" style="height:42px; line-height:42px; font-size:0;">&nbsp;</td>
                   </tr>
                 </table>
 
