@@ -1159,14 +1159,14 @@ li + li {
 
 .cookie-banner {
   position: fixed;
-  right: 1rem;
-  bottom: 1rem;
+  right: 18px;
+  bottom: 18px;
   z-index: 80;
-  width: min(760px, calc(100% - 2rem));
+  width: min(620px, calc(100% - 36px));
   border: 1px solid #eadfce;
-  border-radius: 22px;
+  border-radius: 16px;
   background: #fffaf3;
-  box-shadow: 0 20px 50px rgba(47, 33, 26, .16);
+  box-shadow: 0 12px 32px rgba(47, 33, 26, .12);
 }
 
 .cookie-banner[hidden] {
@@ -1176,39 +1176,41 @@ li + li {
 .cookie-banner__content {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 1rem;
+  gap: 14px;
   align-items: center;
-  padding: 1rem;
+  padding: 14px 16px;
 }
 
 .cookie-banner p {
   margin: 0;
   color: #2f211a;
-  font-size: .92rem;
-  line-height: 1.55;
+  font-size: .9rem;
+  line-height: 1.5;
 }
 
 .cookie-banner a {
   color: inherit;
-  font-weight: 800;
+  font-weight: 700;
   text-decoration: underline;
   text-underline-offset: .18em;
 }
 
 .cookie-banner__actions {
   display: flex;
-  gap: .65rem;
+  gap: .6rem;
   align-items: center;
 }
 
 .cookie-button {
-  min-height: 44px;
-  padding: .72rem 1rem;
+  min-height: 40px;
+  padding: 0 16px;
   border-radius: 999px;
   border: 1px solid transparent;
   font-size: .9rem;
+  font-weight: 700;
   white-space: nowrap;
   cursor: pointer;
+  box-shadow: none;
 }
 
 .cookie-button--primary {
@@ -1218,9 +1220,9 @@ li + li {
 }
 
 .cookie-button--secondary {
-  color: #2f211a;
-  background: transparent;
-  border-color: rgba(85, 62, 49, .20);
+  color: #4c372c;
+  background: #fffaf3;
+  border-color: #d8c8b8;
 }
 
 .cookie-button:focus-visible {
@@ -1586,24 +1588,24 @@ li + li {
   }
 
   .cookie-banner {
-    right: .75rem;
-    bottom: .75rem;
-    width: calc(100% - 1.5rem);
+    right: 12px;
+    bottom: 12px;
+    width: calc(100% - 24px);
     border-radius: 18px;
   }
 
   .cookie-banner__content {
     grid-template-columns: 1fr;
-    padding: .95rem;
+    gap: .75rem;
+    padding: 14px;
   }
 
   .cookie-banner__actions {
-    flex-direction: column-reverse;
     align-items: stretch;
   }
 
   .cookie-button {
-    width: 100%;
+    flex: 1 1 0;
     white-space: normal;
   }
 
