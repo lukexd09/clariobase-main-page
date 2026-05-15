@@ -6,6 +6,26 @@ const formStatus = document.querySelector("#form-status");
 const privacyError = document.querySelector("#privacy-error");
 
 let turnstileToken = "";
+let miniAuditFormStarted = false;
+
+window.dataLayer = window.dataLayer || [];
+
+function pushAnalyticsEvent(eventName, params = {}) {
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({
+    event: eventName,
+    ...params
+  });
+}
+
+const getCtaLocation = (element) => {
+  if (element.closest(".site-header")) return "header";
+  if (element.closest(".hero")) return "hero";
+  if (element.closest(".packages")) return "packages";
+  if (element.closest(".contact")) return "contact";
+  if (element.closest(".site-footer")) return "footer";
+  return "other";
+};
 
 if (year) {
   year.textContent = new Date().getFullYear();
@@ -24,6 +44,15 @@ if (navToggle && navLinks) {
     }
   });
 }
+
+document.querySelectorAll("a[href='#kontakt'], a[href='index.html#kontakt']").forEach((link) => {
+  link.addEventListener("click", () => {
+    pushAnalyticsEvent("click_cta_mini_audit", {
+      cta_location: getCtaLocation(link),
+      cta_text: link.textContent.trim()
+    });
+  });
+});
 
 const setFormStatus = (message, type) => {
   if (!formStatus) return;
@@ -86,6 +115,27 @@ window.onTurnstileError = function () {
 if (contactForm instanceof HTMLFormElement) {
   const privacyAcceptedInput = contactForm.elements.privacyAccepted;
 
+  const trackFormStart = () => {
+    if (miniAuditFormStarted) return;
+    miniAuditFormStarted = true;
+    pushAnalyticsEvent("form_start", {
+      form_name: "mini_audit"
+    });
+  };
+
+  contactForm.addEventListener("focusin", (event) => {
+    const target = event.target;
+    if (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement ||
+      target instanceof HTMLSelectElement
+    ) {
+      if (target.name !== "companyWebsite") {
+        trackFormStart();
+      }
+    }
+  });
+
   if (privacyAcceptedInput instanceof HTMLInputElement) {
     privacyAcceptedInput.addEventListener("change", () => {
       if (privacyAcceptedInput.checked) {
@@ -103,6 +153,10 @@ if (contactForm instanceof HTMLFormElement) {
     if (privacyAccepted instanceof HTMLInputElement && !privacyAccepted.checked) {
       setPrivacyError(privacyAccepted, "Zaznacz zgodę, aby wysłać formularz.");
       privacyAccepted.focus();
+      pushAnalyticsEvent("form_submit_error", {
+        form_name: "mini_audit",
+        error_type: "validation"
+      });
       return;
     }
 
@@ -111,6 +165,10 @@ if (contactForm instanceof HTMLFormElement) {
     }
 
     if (!contactForm.reportValidity()) {
+      pushAnalyticsEvent("form_submit_error", {
+        form_name: "mini_audit",
+        error_type: "validation"
+      });
       return;
     }
 
@@ -133,6 +191,10 @@ if (contactForm instanceof HTMLFormElement) {
 
     if (!turnstileToken) {
       setFormStatus("Potwierdź zabezpieczenie antyspamowe i spróbuj ponownie.", "error");
+      pushAnalyticsEvent("form_submit_error", {
+        form_name: "mini_audit",
+        error_type: "turnstile"
+      });
       return;
     }
 
@@ -163,8 +225,9 @@ if (contactForm instanceof HTMLFormElement) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
       });
+      const result = await response.json().catch(() => ({}));
 
-      if (!response.ok) {
+      if (!response.ok || result.ok === false) {
         throw new Error("Contact endpoint unavailable");
       }
 
@@ -177,9 +240,16 @@ if (contactForm instanceof HTMLFormElement) {
         "Dziękuję — prośba o mini-audyt została wysłana. Wrócę z odpowiedzią zazwyczaj w ciągu 1–2 dni roboczych.",
         "success"
       );
+      pushAnalyticsEvent("form_submit_success", {
+        form_name: "mini_audit"
+      });
     } catch (error) {
       resetTurnstile();
       setFormStatus("Nie udało się wysłać formularza. Spróbuj ponownie za chwilę.", "error");
+      pushAnalyticsEvent("form_submit_error", {
+        form_name: "mini_audit",
+        error_type: error instanceof Error ? "backend" : "unknown"
+      });
     } finally {
       submitButton?.removeAttribute("disabled");
       if (submitButton) {
