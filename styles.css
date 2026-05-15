@@ -972,7 +972,7 @@ li + li {
 .form-legal-note {
   max-width: 100%;
   margin: 1rem 0 .75rem;
-  color: rgba(76, 55, 44, .68);
+  color: #6f6258;
   font-size: .86rem;
   line-height: 1.6;
 }
@@ -983,6 +983,10 @@ li + li {
   font-weight: 800;
   text-decoration: underline;
   text-underline-offset: .18em;
+}
+
+.form-legal-note a {
+  color: #6f6258;
 }
 
 .form-consent {
@@ -1036,7 +1040,7 @@ li + li {
 
 .form-security-note {
   margin: 1.25rem 0 .55rem;
-  color: rgba(76, 55, 44, .58);
+  color: #6f6258;
   font-size: .84rem;
   line-height: 1.45;
   text-align: center;
