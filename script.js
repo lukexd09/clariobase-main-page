@@ -7,6 +7,7 @@ const privacyError = document.querySelector("#privacy-error");
 
 let turnstileToken = "";
 let miniAuditFormStarted = false;
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 window.dataLayer = window.dataLayer || [];
 
@@ -70,6 +71,15 @@ const setFormStatus = (message, type) => {
   }
 };
 
+const focusFirstInvalidField = (field) => {
+  if (!(field instanceof HTMLElement)) return;
+
+  const headerOffset = 120;
+  const y = field.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+  window.scrollTo({ top: y, behavior: "smooth" });
+  setTimeout(() => field.focus({ preventScroll: true }), 300);
+};
+
 function clearFormStatus() {
   const status = document.getElementById("form-status");
   if (!status) return;
@@ -83,6 +93,7 @@ const setPrivacyError = (checkbox, message) => {
 
   const consent = checkbox?.closest?.(".form-consent");
   privacyError.textContent = message;
+  privacyError.hidden = !message;
 
   if (message) {
     checkbox?.setAttribute("aria-invalid", "true");
@@ -93,6 +104,77 @@ const setPrivacyError = (checkbox, message) => {
     checkbox?.removeAttribute("aria-describedby");
     consent?.classList.remove("has-error");
   }
+};
+
+const getFieldErrorElement = (field) => {
+  if (!field.id) return null;
+  return document.getElementById(`${field.id}-error`);
+};
+
+const setFieldError = (field, message) => {
+  const error = getFieldErrorElement(field);
+  if (!error) return;
+
+  error.textContent = message;
+  error.hidden = !message;
+
+  if (message) {
+    field.classList.add("input-error");
+    field.setAttribute("aria-invalid", "true");
+    field.setAttribute("aria-describedby", error.id);
+  } else {
+    field.classList.remove("input-error");
+    field.setAttribute("aria-invalid", "false");
+    field.removeAttribute("aria-describedby");
+  }
+};
+
+const getFormControl = (form, name) => {
+  const control = form.elements[name];
+  if (control instanceof HTMLInputElement || control instanceof HTMLTextAreaElement) {
+    return control;
+  }
+  return null;
+};
+
+const validateRequiredFields = (form) => {
+  const fieldRules = [
+    { name: "name", emptyMessage: "Uzupełnij imię i nazwisko." },
+    {
+      name: "email",
+      emptyMessage: "Podaj adres e-mail.",
+      validate: (field) => emailPattern.test(field.value.trim()),
+      invalidMessage: "Podaj poprawny adres e-mail."
+    },
+    { name: "url", emptyMessage: "Wklej link do strony, Instagrama, Booksy albo wizytówki Google." },
+    { name: "city", emptyMessage: "Podaj miasto." },
+    { name: "serviceType", emptyMessage: "Wpisz rodzaj usługi beauty." },
+    { name: "message", emptyMessage: "Opisz krótko, co dziś najbardziej przeszkadza." }
+  ];
+
+  let firstInvalidField = null;
+
+  fieldRules.forEach((rule) => {
+    const field = getFormControl(form, rule.name);
+    if (!field) return;
+
+    const value = field.value.trim();
+    let message = "";
+
+    if (!value) {
+      message = rule.emptyMessage;
+    } else if (rule.validate && !rule.validate(field)) {
+      message = rule.invalidMessage;
+    }
+
+    setFieldError(field, message);
+
+    if (message && !firstInvalidField) {
+      firstInvalidField = field;
+    }
+  });
+
+  return firstInvalidField;
 };
 
 const resetTurnstile = () => {
@@ -118,6 +200,20 @@ window.onTurnstileError = function () {
 
 if (contactForm instanceof HTMLFormElement) {
   const privacyAcceptedInput = contactForm.elements.privacyAccepted;
+  const requiredFieldNames = ["name", "email", "url", "city", "serviceType", "message"];
+
+  const clearFormValidation = () => {
+    requiredFieldNames.forEach((fieldName) => {
+      const field = getFormControl(contactForm, fieldName);
+      if (field) {
+        setFieldError(field, "");
+      }
+    });
+
+    if (privacyAcceptedInput instanceof HTMLInputElement) {
+      setPrivacyError(privacyAcceptedInput, "");
+    }
+  };
 
   const trackFormStart = () => {
     if (miniAuditFormStarted) return;
@@ -140,6 +236,21 @@ if (contactForm instanceof HTMLFormElement) {
     }
   });
 
+  requiredFieldNames.forEach((fieldName) => {
+    const field = getFormControl(contactForm, fieldName);
+    if (!field) return;
+
+    field.addEventListener("input", () => {
+      if (fieldName === "email" && field.value.trim() && !emailPattern.test(field.value.trim())) {
+        return;
+      }
+
+      if (field.value.trim()) {
+        setFieldError(field, "");
+      }
+    });
+  });
+
   if (privacyAcceptedInput instanceof HTMLInputElement) {
     privacyAcceptedInput.addEventListener("change", () => {
       if (privacyAcceptedInput.checked) {
@@ -152,27 +263,28 @@ if (contactForm instanceof HTMLFormElement) {
     event.preventDefault();
     setFormStatus("", "");
 
+    const firstInvalidField = validateRequiredFields(contactForm);
     const privacyAccepted = contactForm.elements.privacyAccepted;
+    const privacyInvalid = privacyAccepted instanceof HTMLInputElement && !privacyAccepted.checked;
 
-    if (privacyAccepted instanceof HTMLInputElement && !privacyAccepted.checked) {
-      setPrivacyError(privacyAccepted, "Zaznacz zgodę, aby wysłać formularz.");
-      privacyAccepted.focus();
-      pushAnalyticsEvent("form_submit_error", {
-        form_name: "mini_audit",
-        error_type: "validation"
-      });
-      return;
-    }
-
-    if (privacyAccepted instanceof HTMLInputElement) {
+    if (privacyInvalid) {
+      setPrivacyError(privacyAccepted, "Potwierdź zapoznanie się z Polityką prywatności.");
+    } else if (privacyAccepted instanceof HTMLInputElement) {
       setPrivacyError(privacyAccepted, "");
     }
 
-    if (!contactForm.reportValidity()) {
+    if (firstInvalidField || privacyInvalid) {
+      setFormStatus("Uzupełnij wymagane pola i spróbuj ponownie.", "error");
       pushAnalyticsEvent("form_submit_error", {
         form_name: "mini_audit",
         error_type: "validation"
       });
+
+      if (firstInvalidField) {
+        focusFirstInvalidField(firstInvalidField);
+      } else if (privacyAccepted instanceof HTMLInputElement) {
+        focusFirstInvalidField(privacyAccepted);
+      }
       return;
     }
 
@@ -184,9 +296,7 @@ if (contactForm instanceof HTMLFormElement) {
         "success"
       );
       contactForm.reset();
-      if (privacyAccepted instanceof HTMLInputElement) {
-        setPrivacyError(privacyAccepted, "");
-      }
+      clearFormValidation();
       resetTurnstile();
       return;
     }
@@ -199,6 +309,10 @@ if (contactForm instanceof HTMLFormElement) {
         form_name: "mini_audit",
         error_type: "turnstile"
       });
+      const turnstileWrap = document.querySelector(".turnstile-wrap");
+      if (turnstileWrap instanceof HTMLElement) {
+        focusFirstInvalidField(turnstileWrap);
+      }
       return;
     }
 
@@ -239,9 +353,7 @@ if (contactForm instanceof HTMLFormElement) {
       }
 
       contactForm.reset();
-      if (privacyAccepted instanceof HTMLInputElement) {
-        setPrivacyError(privacyAccepted, "");
-      }
+      clearFormValidation();
       resetTurnstile();
       setFormStatus(
         "Dziękuję — prośba o mini-audyt została wysłana. Wrócę z odpowiedzią zazwyczaj w ciągu 1–2 dni roboczych.",

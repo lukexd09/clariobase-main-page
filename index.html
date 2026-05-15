@@ -622,26 +622,32 @@
             <div class="form-field">
               <label for="contact-name">Imię</label>
               <input id="contact-name" name="name" type="text" autocomplete="given-name" required />
+              <p class="field-error" id="contact-name-error" hidden></p>
             </div>
             <div class="form-field">
               <label for="contact-email">Email do odpowiedzi</label>
               <input id="contact-email" name="email" type="email" autocomplete="email" required />
+              <p class="field-error" id="contact-email-error" hidden></p>
             </div>
             <div class="form-field form-field-wide">
               <label for="contact-link">Link do strony / Instagrama / Booksy / wizytówki Google</label>
               <input id="contact-link" name="url" type="url" inputmode="url" autocomplete="url" required />
+              <p class="field-error" id="contact-link-error" hidden></p>
             </div>
             <div class="form-field">
               <label for="contact-city">Miasto</label>
-              <input id="contact-city" name="city" type="text" autocomplete="address-level2" />
+              <input id="contact-city" name="city" type="text" autocomplete="address-level2" required />
+              <p class="field-error" id="contact-city-error" hidden></p>
             </div>
             <div class="form-field">
               <label for="contact-service">Rodzaj usług beauty</label>
-              <input id="contact-service" name="serviceType" type="text" autocomplete="off" />
+              <input id="contact-service" name="serviceType" type="text" autocomplete="off" required />
+              <p class="field-error" id="contact-service-error" hidden></p>
             </div>
             <div class="form-field form-field-wide">
               <label for="contact-message">Co dziś najbardziej przeszkadza Ci w obecnej obecności online?</label>
               <textarea id="contact-message" name="message" rows="5" required></textarea>
+              <p class="field-error" id="contact-message-error" hidden></p>
             </div>
             <div class="honeypot-field" aria-hidden="true">
               <label for="company-website">Strona firmowa</label>
@@ -666,7 +672,7 @@
               Zapoznałem/am się z <a href="polityka-prywatnosci.html">Polityką prywatności</a>.
             </span>
           </label>
-          <p id="privacy-error" class="field-error" aria-live="polite"></p>
+          <p id="privacy-error" class="field-error" aria-live="polite" hidden></p>
           <p class="form-security-note">Formularz jest zabezpieczony przed spamem.</p>
           <div class="turnstile-wrap">
             <div

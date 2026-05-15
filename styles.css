@@ -950,6 +950,12 @@ li + li {
   box-shadow: 0 0 0 4px rgba(185, 146, 95, .16);
 }
 
+.form-field input.input-error,
+.form-field textarea.input-error {
+  border-color: #b65a4a;
+  box-shadow: 0 0 0 3px rgba(182, 90, 74, .12);
+}
+
 .honeypot-field {
   position: absolute;
   left: -10000px;
@@ -1013,7 +1019,18 @@ li + li {
   line-height: 1.45;
 }
 
+.form-field .field-error {
+  margin: .45rem 0 0;
+  color: #9a3f32;
+  font-size: .88rem;
+  line-height: 1.4;
+}
+
 .field-error:empty {
+  display: none;
+}
+
+.field-error[hidden] {
   display: none;
 }
 
