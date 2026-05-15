@@ -4,10 +4,15 @@ const year = document.querySelector("[data-year]");
 const contactForm = document.querySelector("#contact-form");
 const formStatus = document.querySelector("#form-status");
 const privacyError = document.querySelector("#privacy-error");
+const cookieBanner = document.querySelector("[data-cookie-banner]");
+const cookieAcceptButton = document.querySelector("[data-cookie-accept]");
+const cookieRejectButton = document.querySelector("[data-cookie-reject]");
+const cookieSettingsButtons = document.querySelectorAll("[data-cookie-settings]");
 
 let turnstileToken = "";
 let miniAuditFormStarted = false;
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const cookieConsentKey = "clariobase_cookie_consent";
 
 window.dataLayer = window.dataLayer || [];
 
@@ -18,6 +23,78 @@ function pushAnalyticsEvent(eventName, params = {}) {
     ...params
   });
 }
+
+const updateConsentMode = (analyticsConsent, shouldPushEvent = true) => {
+  if (typeof window.gtag === "function") {
+    window.gtag("consent", "update", {
+      analytics_storage: analyticsConsent,
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied"
+    });
+  }
+
+  if (shouldPushEvent) {
+    pushAnalyticsEvent("cookie_consent_update", {
+      consent_analytics: analyticsConsent
+    });
+  }
+};
+
+const setCookieBannerVisibility = (isVisible) => {
+  if (!cookieBanner) return;
+  cookieBanner.hidden = !isVisible;
+
+  if (isVisible) {
+    setTimeout(() => {
+      const firstButton = cookieBanner.querySelector("button");
+      if (firstButton instanceof HTMLButtonElement) {
+        firstButton.focus({ preventScroll: true });
+      }
+    }, 50);
+  }
+};
+
+const saveCookieConsent = (decision) => {
+  try {
+    window.localStorage.setItem(cookieConsentKey, decision);
+  } catch (error) {
+    console.warn("Could not save cookie consent decision.");
+  }
+};
+
+const readCookieConsent = () => {
+  try {
+    return window.localStorage.getItem(cookieConsentKey);
+  } catch (error) {
+    return null;
+  }
+};
+
+const applyStoredCookieConsent = () => {
+  const decision = readCookieConsent();
+
+  if (decision === "accepted") {
+    updateConsentMode("granted", false);
+    setCookieBannerVisibility(false);
+    return;
+  }
+
+  if (decision === "rejected") {
+    updateConsentMode("denied", false);
+    setCookieBannerVisibility(false);
+    return;
+  }
+
+  setCookieBannerVisibility(true);
+};
+
+const handleCookieDecision = (decision) => {
+  const analyticsConsent = decision === "accepted" ? "granted" : "denied";
+  saveCookieConsent(decision);
+  updateConsentMode(analyticsConsent);
+  setCookieBannerVisibility(false);
+};
 
 const getCtaLocation = (element) => {
   if (element.closest(".site-header")) return "header";
@@ -31,6 +108,22 @@ const getCtaLocation = (element) => {
 if (year) {
   year.textContent = new Date().getFullYear();
 }
+
+applyStoredCookieConsent();
+
+cookieAcceptButton?.addEventListener("click", () => {
+  handleCookieDecision("accepted");
+});
+
+cookieRejectButton?.addEventListener("click", () => {
+  handleCookieDecision("rejected");
+});
+
+cookieSettingsButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    setCookieBannerVisibility(true);
+  });
+});
 
 if (navToggle && navLinks) {
   navToggle.addEventListener("click", () => {

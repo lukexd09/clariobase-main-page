@@ -1134,10 +1134,98 @@ li + li {
   text-decoration: none;
 }
 
+.footer-cookie-button {
+  border: 0;
+  padding: 0;
+  color: var(--ink-soft);
+  background: transparent;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.site-footer a:focus-visible,
+.footer-cookie-button:focus-visible {
+  outline: 2px solid rgba(143, 86, 70, .45);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
 .footer-links {
   display: flex;
   flex-wrap: wrap;
   gap: .75rem 1rem;
+}
+
+.cookie-banner {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 80;
+  width: min(760px, calc(100% - 2rem));
+  border: 1px solid #eadfce;
+  border-radius: 22px;
+  background: #fffaf3;
+  box-shadow: 0 20px 50px rgba(47, 33, 26, .16);
+}
+
+.cookie-banner[hidden] {
+  display: none;
+}
+
+.cookie-banner__content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+}
+
+.cookie-banner p {
+  margin: 0;
+  color: #2f211a;
+  font-size: .92rem;
+  line-height: 1.55;
+}
+
+.cookie-banner a {
+  color: inherit;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: .18em;
+}
+
+.cookie-banner__actions {
+  display: flex;
+  gap: .65rem;
+  align-items: center;
+}
+
+.cookie-button {
+  min-height: 44px;
+  padding: .72rem 1rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: .9rem;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.cookie-button--primary {
+  color: #fffaf3;
+  background: var(--sage-dark);
+  border-color: var(--sage-dark);
+}
+
+.cookie-button--secondary {
+  color: #2f211a;
+  background: transparent;
+  border-color: rgba(85, 62, 49, .20);
+}
+
+.cookie-button:focus-visible {
+  outline: 3px solid rgba(143, 86, 70, .35);
+  outline-offset: 3px;
 }
 
 .legal-shell {
@@ -1495,6 +1583,28 @@ li + li {
 
   .turnstile-wrap {
     padding: .65rem .35rem;
+  }
+
+  .cookie-banner {
+    right: .75rem;
+    bottom: .75rem;
+    width: calc(100% - 1.5rem);
+    border-radius: 18px;
+  }
+
+  .cookie-banner__content {
+    grid-template-columns: 1fr;
+    padding: .95rem;
+  }
+
+  .cookie-banner__actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .cookie-button {
+    width: 100%;
+    white-space: normal;
   }
 
   .footer-inner {

@@ -3,6 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ window.dataLayer.push(arguments); }
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        analytics_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied'
+      });
+    </script>
     <!-- Google Tag Manager -->
     <script>
       (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -700,10 +710,25 @@
         <nav class="footer-links" aria-label="Linki w stopce">
           <a href="#kontakt" data-analytics="cta-mini-audit" data-cta-location="footer">Kontakt</a>
           <a href="polityka-prywatnosci.html">Polityka prywatności</a>
+          <button class="footer-cookie-button" type="button" data-cookie-settings>Ustawienia cookies</button>
         </nav>
       </div>
       <p>© 2026 ClarioBase. Wszelkie prawa zastrzeżone.</p>
     </footer>
+
+    <div class="cookie-banner" role="dialog" aria-label="Ustawienia plików cookie" data-cookie-banner hidden>
+      <div class="cookie-banner__content">
+        <p>
+          Korzystam z plików cookie analitycznych, żeby sprawdzać, jak działa strona i co warto poprawić. Możesz
+          zaakceptować analitykę albo odmówić. Szczegóły znajdziesz w
+          <a href="polityka-prywatnosci.html">Polityce prywatności</a>.
+        </p>
+        <div class="cookie-banner__actions">
+          <button class="button cookie-button cookie-button--secondary" type="button" data-cookie-reject>Odrzucam</button>
+          <button class="button cookie-button cookie-button--primary" type="button" data-cookie-accept>Akceptuję analitykę</button>
+        </div>
+      </div>
+    </div>
 
     <script src="script.js" defer></script>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
