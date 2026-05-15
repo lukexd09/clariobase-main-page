@@ -45,12 +45,16 @@ if (navToggle && navLinks) {
   });
 }
 
-document.querySelectorAll("a[href='#kontakt'], a[href='index.html#kontakt']").forEach((link) => {
-  link.addEventListener("click", () => {
-    pushAnalyticsEvent("click_cta_mini_audit", {
-      cta_location: getCtaLocation(link),
-      cta_text: link.textContent.trim()
-    });
+document.addEventListener("click", (event) => {
+  const target = event.target;
+  if (!(target instanceof Element)) return;
+
+  const cta = target.closest("[data-analytics='cta-mini-audit']");
+  if (!(cta instanceof HTMLElement)) return;
+
+  pushAnalyticsEvent("click_cta_mini_audit", {
+    cta_location: cta.dataset.ctaLocation || getCtaLocation(cta),
+    cta_text: cta.textContent.trim()
   });
 });
 
@@ -207,6 +211,8 @@ if (contactForm instanceof HTMLFormElement) {
     }
     setFormStatus("", "");
 
+    let submitErrorType = "unknown";
+
     try {
       const payload = {
         name: String(formData.get("name") || "").trim(),
@@ -228,6 +234,7 @@ if (contactForm instanceof HTMLFormElement) {
       const result = await response.json().catch(() => ({}));
 
       if (!response.ok || result.ok === false) {
+        submitErrorType = "backend";
         throw new Error("Contact endpoint unavailable");
       }
 
@@ -248,7 +255,7 @@ if (contactForm instanceof HTMLFormElement) {
       setFormStatus("Nie udało się wysłać formularza. Spróbuj ponownie za chwilę.", "error");
       pushAnalyticsEvent("form_submit_error", {
         form_name: "mini_audit",
-        error_type: error instanceof Error ? "backend" : "unknown"
+        error_type: typeof submitErrorType === "string" ? submitErrorType : "unknown"
       });
     } finally {
       submitButton?.removeAttribute("disabled");
